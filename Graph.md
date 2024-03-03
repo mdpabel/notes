@@ -1,3 +1,51 @@
+## Graph in Java
+
+In the Graph class, member variables such as nodes and adjacencyList are utilized to represent key aspects of the graph's structure. The nodes map, for instance, serves as a repository for the graph's nodes, with each node uniquely identified by its label. Similarly, the adjacencyList map embodies the essence of the graph's connectivity, mapping each node to its corresponding list of adjacent nodes
+
+#### addNode()
+
+The addNode() method creates a new node with the provided label and adds it to the nodes map if it doesn't already exist. Then, it initializes an empty adjacency list for the node in the adjacencyList map if it's not already present.
+
+#### removeNode()
+
+The removeNode() method removes a node from the graph along with its connections. It removes connections to the node from other nodes in the adjacency list, removes the node itself from the adjacency list, and finally removes the node from the nodes map.
+
+#### addEdge()
+
+The addEdge() method adds an edge between two nodes in the graph. It retrieves the corresponding nodes from the nodes map, ensures they are valid nodes, and then adds the second node to the adjacency list of the first node.
+
+#### removeEdge()
+
+The removeEdge() method removes an edge between two nodes in the graph. It retrieves the corresponding nodes from the nodes map, ensures they are valid nodes, and then removes the second node from the adjacency list of the first node.
+
+#### dfs()
+
+The dfs() method performs Depth-First Search (DFS) traversal starting from a given root node. It retrieves the node from the nodes map, ensures it's a valid node, and then calls the dfsHelper() method to perform the actual DFS traversal.
+
+#### dfsHelper()
+
+The dfsHelper() method is a helper method for recursive DFS traversal. It recursively explores the neighbors of a given node and marks them as visited, ensuring that each node is visited only once.
+
+#### bfs()
+
+The bfs() method performs Breadth-First Search (BFS) traversal starting from a given root node. It retrieves the node from the nodes map, ensures it's a valid node, and then uses a queue to visit all nodes in the graph level by level.
+
+#### topologicalSort()
+
+The topologicalSort() method performs topological sorting of the graph using Depth-First Search (DFS). It initializes a stack to store the sorted nodes and then calls the topologicalSortHelper() method for each node in the graph.
+
+#### topologicalSortHelper()
+
+The topologicalSortHelper() method is a helper method for topological sorting. It recursively explores the neighbors of a given node and adds the node to a stack after visiting all its neighbors, ensuring that nodes are added to the stack in topological order.
+
+#### hasCycle()
+
+The hasCycle() method detects cycles in the graph using Depth-First Search (DFS). It initializes sets to keep track of all nodes, currently visiting nodes, and visited nodes. Then, it iterates through all nodes in the graph and calls the hasCycleHelper() method for each unvisited node.
+
+#### hasCycleHelper()
+
+The hasCycleHelper() method is a helper method to detect cycles. It recursively explores the neighbors of a given node and checks for back edges, indicating the presence of a cycle in the graph.
+
 ```java
 package graph;
 
