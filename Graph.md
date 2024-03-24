@@ -1,4 +1,7 @@
-## Graph in Java
+---
+title: Graph Data Structure
+description: Implementations of graph data structures in Java
+---
 
 In the Graph class, member variables such as nodes and adjacencyList are utilized to represent key aspects of the graph's structure. The nodes map, for instance, serves as a repository for the graph's nodes, with each node uniquely identified by its label. Similarly, the adjacencyList map embodies the essence of the graph's connectivity, mapping each node to its corresponding list of adjacent nodes
 
