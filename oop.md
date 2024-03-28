@@ -299,3 +299,9 @@ public class LinkedList {
   //
 }
 ```
+
+References:
+
+1. https://codewithmosh.com/p/ultimate-java-part-2
+
+![OOP certificate](images/oop_certificate.png)
