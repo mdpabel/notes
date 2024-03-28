@@ -4,6 +4,12 @@ description: Aspect-Oriented Programming in spring boot
 date: 03-28-2024
 ---
 
+Aspect-Oriented Programming provides a way for us to inject code into existing functions or objects, without modifying the target logic.
+
+To give you a good example, imagine having written your business logic but now you realize that you have no logging code. The normal approach to this would be to centralize your logging logic inside a new module and the go function by function adding logging information.
+
+However, if you could grab that same logger and inject it into every method you’re looking to log, at very specific points during their execution with a single line of code, then this would definitely give you a lot of value. Wouldn’t you agree?
+
 AOP (Aspect-Oriented Programming) in Spring Boot allows developers to modularize cross-cutting concerns, such as logging, security, transaction management, and error handling, separately from the business logic of the application. This approach promotes cleaner code by separating concerns and promoting reusability.
 
 > AOP in Spring Boot can be compared to middleware in Express.js in some aspects. Both AOP in Spring Boot and middleware in Express.js serve similar purposes:
@@ -16,10 +22,10 @@ However, there are some differences, AOP is a programming paradigm that focuses 
 
 The key components of AOP in Spring Boot include:
 
-- Aspect: An aspect is a modular unit of cross-cutting concern implementation. In Spring Boot, aspects are typically defined as Java classes annotated with @Aspect.
-- Advice: Advice is the action taken by an aspect at a particular join point. In Spring Boot, advice methods are annotated with @Before, @After, @Around, @AfterReturning, or @AfterThrowing.
+- Aspects (What): These are the “aspects” or behavior you’re looking to inject into your target code. In Spring Boot, aspects are typically defined as Java classes annotated with @Aspect.
+- Advice (When): When do you want the aspect to run? They specify some common moments when you want your aspect’s code to be executed, such as “before”, “after”, “around”, “whenThrowing”, and the like. . In Spring Boot, advice methods are annotated with @Before, @After, @Around, @AfterReturning, or @AfterThrowing.
 - Join Point: A join point is a point during the execution of the application where an aspect can be plugged in. In Spring Boot, join points are method invocations.
-- Pointcut: A pointcut is a set of one or more join points where advice should be executed. In Spring Boot, pointcuts are defined using expressions, such as method signatures or regular expressions.
+- Pointcut (Where): They reference the place in your target code where you want to inject the aspect. In Spring Boot, pointcuts are defined using expressions, such as method signatures or regular expressions.
 
 ```java
 import org.aspectj.lang.annotation.*;
@@ -45,3 +51,9 @@ public class LoggingAspect {
 - @Before and @After are advice annotations specifying the pointcuts where the advice methods should be executed.
 - execution(\* com.example.service._._(..)) is a pointcut expression targeting all methods in the com.example.service package.
 - JoinPoint is a parameter of advice methods, providing metadata about the method being intercepted.
+
+### Resources:
+
+1. https://blog.bitsrc.io/aspect-oriented-programming-in-javascript-c4cb43f6bfcc
+2. https://docs.spring.io/spring-framework/reference/core/aop.html
+3. https://www.udemy.com/course/spring-5-with-spring-boot-2/
