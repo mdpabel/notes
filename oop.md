@@ -83,7 +83,7 @@ The this keyword in Java is a reference variable that refers to the current obje
 
 Method chaining is a common syntax for invoking multiple method calls in object-oriented programming languages.
 
-## Encapsulation
+## 1. Encapsulation
 
 Encapsulation is the bundling of data with the methods that operate on these data. The data is hidden from outside the class and can only be accessed through methods, which provides control over how the data can be manipulated and prevents unintended modification or access, these methods are called (public) setter and getter methods.
 
@@ -102,7 +102,7 @@ public class Employee {
 
 ```
 
-## Abstraction
+## 2. Abstraction
 
 Abstraction in Java refers to hiding the implementation details of a code and exposing only the necessary information to the user.
 
@@ -170,7 +170,7 @@ Coupling refers to the degree of direct knowledge that one element has of anothe
 
 A technique where one object supplies the dependencies of another object, promoting loose coupling.
 
-## Inheritance
+## 3. Inheritance
 
 - Allows a class to inherit properties and methods from another class.
 - Constructors of the base class can be called in the derived class using super().
@@ -241,7 +241,7 @@ Prevent classes and methods from being inherited/overridden.
 
 Java does not support multiple inheritance with classes to avoid complexity and diamond problem.
 
-## Polymorphism
+## 4. Polymorphism
 
 Ability of an object to take on many forms. It's a core concept that allows one interface to be used for a general class of actions. We can implemenet using method overriding where a child class overrides a method of its parent class.
 
