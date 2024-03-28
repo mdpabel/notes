@@ -1,5 +1,5 @@
 ---
-title: Aspect-Oriented Programming (AOP)
+title: Aspect-Oriented Programming (AoP)
 description: Aspect-Oriented Programming in spring boot
 date: 03-28-2024
 ---
