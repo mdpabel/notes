@@ -304,4 +304,4 @@ References:
 
 1. https://codewithmosh.com/p/ultimate-java-part-2
 
-![OOP certificate](images/oop_certificate.png)
+![OOP certificate](https://raw.githubusercontent.com/mdpabel/notes/main/images/oop_certificate.png?token=GHSAT0AAAAAACQABTY5RUORULFPRT72R4R6ZQFW26A)
