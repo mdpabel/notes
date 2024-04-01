@@ -1,7 +1,7 @@
 ---
 title: Database Transactions and Concurrency
 description: Database Transactions, Concurrency, and Isolation Levels.
-date: 03-28-2024
+date: 04-01-2024
 ---
 
 A transaction is a sinlge unit of work that execute one or more SQL statements. It represents a single unit of work that should be executed as a whole, either entirely successful or entirely unsuccessful.
