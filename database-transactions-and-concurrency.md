@@ -1,5 +1,5 @@
 ---
-title: Transactions and Concurrency
+title: Database Transactions and Concurrency
 description: Database Transactions, Concurrency, and Isolation Levels.
 date: 03-28-2024
 ---
