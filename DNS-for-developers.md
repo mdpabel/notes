@@ -1,6 +1,6 @@
 ---
 title: DNS for Developers
-description: Implementations of graph data structures in Java
+description: DNS principles and real-world applications tailored for developers.
 date: 04-15-2024
 ---
 
