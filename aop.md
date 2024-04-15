@@ -2,6 +2,8 @@
 title: Aspect-Oriented Programming (AOP)
 description: Aspect-Oriented Programming in spring boot
 date: 03-28-2024
+status: published
+priority: 997
 ---
 
 Aspect-Oriented Programming provides a way for us to inject code into existing functions or objects, without modifying the target logic.

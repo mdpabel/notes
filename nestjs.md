@@ -1,3 +1,11 @@
+---
+title: Graph Data Structure
+description: Implementations of graph data structures in Java
+date: 03-24-2024
+status: draft
+priority: 1
+---
+
 ## Cli
 
 1. Install Nest CLI:
