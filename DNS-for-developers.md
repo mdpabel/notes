@@ -10,9 +10,9 @@ Think of it as the phone book of the internet. Instead of looking up people's na
 
 When you host a website like mdpabel.com on a platform such as Vercel, It uses to store and serve your website's content. Here’s a breakdown of what this typically involves:
 
-1. DNS Servers: These are the servers responsible for translating your domain name (mdpabel.com) into an IP address that computers and other devices can understand. For a site hosted on Vercel, you would have set DNS records pointing to Vercel’s servers.
+1. **DNS Servers**: These are the servers responsible for translating your domain name (mdpabel.com) into an IP address that computers and other devices can understand. For a site hosted on Vercel, you would have set DNS records pointing to Vercel’s servers.
 
-2. Web Servers: These are the servers where your actual website files (HTML, CSS, JavaScript, images, etc.) are stored and served from. When someone types mdpabel.com into their browser, the DNS servers direct them to the web servers that hold your site’s content.
+2. **Web Servers**: These are the servers where your actual website files (HTML, CSS, JavaScript, images, etc.) are stored and served from. When someone types mdpabel.com into their browser, the DNS servers direct them to the web servers that hold your site’s content.
 
 Here’s a simple DNS structured:
 
@@ -36,10 +36,12 @@ Here’s a simple DNS structured:
 
 This is like giving someone control over a part of your phone book. For example, the organization that controls .org lets the Wikimedia Foundation manage everything under wikipedia.org.
 
-1. Root: This is the top of the DNS tree, indicated by a dot (.). It directs where to go next to find the website's address.
-2. Top-Level Domains (TLDs): These are categories like .com and .org in our tree. They help organize the internet by types of websites.
-3. Second-Level Domains: These are specific names under a TLD, like google.com under .com.
-4. Subdomains: These are further divisions of domains, like www and mail under google.com.
+A DNS zone delegation is the delegation of the authority over a portion of a DNS namespace to a set of different nameservers.
+
+1. **Root**: This is the top of the DNS tree, indicated by a dot (.). It directs where to go next to find the website's address.
+2. **Top-Level Domains (TLDs)**: These are categories like .com and .org in our tree. They help organize the internet by types of websites.
+3. **Second-Level Domains**: These are specific names under a TLD, like google.com under .com.
+4. **Subdomains**: These are further divisions of domains, like www and mail under google.com.
 
 When you want to visit a website like "google.com", your device asks DNS servers for its IP address. It starts at the root, then moves to ".com", and finally to "google.com" servers, getting the IP address each time. This process helps your device find the correct server to connect to.
 
@@ -53,10 +55,10 @@ All servers should reply with the same DNS data. These servers can be kept in sy
 
 Storing the same data on secondary servers alongside the primary server is crucial for several reasons, which ensure reliability, efficiency, and continuity in serving DNS data. Here’s why it’s important:
 
-1. Redundancy and Fault Tolerance: If the primary server experiences downtime due to maintenance, hardware failure, or network issues, secondary servers can continue to serve DNS requests without interruption.
+1. **Redundancy and Fault Tolerance**: If the primary server experiences downtime due to maintenance, hardware failure, or network issues, secondary servers can continue to serve DNS requests without interruption.
 
-2. Load Balancing: Having multiple servers handle DNS requests helps distribute the load. During times of high traffic, this distribution prevents any single server from becoming overwhelmed, which can degrade performance or lead to outages.
+2. **Load Balancing**: Having multiple servers handle DNS requests helps distribute the load. During times of high traffic, this distribution prevents any single server from becoming overwhelmed, which can degrade performance or lead to outages.
 
-3. Geographic Distribution: Secondary servers are often located in different geographic locations. This means that DNS queries can be responded to more quickly if a server is closer to the user, reducing latency and speeding up the overall response time for resolving domain names.
+3. **Geographic Distribution**: Secondary servers are often located in different geographic locations. This means that DNS queries can be responded to more quickly if a server is closer to the user, reducing latency and speeding up the overall response time for resolving domain names.
 
-4. Disaster Recovery: In the event of a catastrophic failure at the primary server location, secondary servers can act as a fail-safe, ensuring that DNS services can be quickly restored without loss of data.
+4. **Disaster Recovery**: In the event of a catastrophic failure at the primary server location, secondary servers can act as a fail-safe, ensuring that DNS services can be quickly restored without loss of data.
