@@ -13,3 +13,15 @@ Visit [https://www.mdpabel.com/notes](https://www.mdpabel.com/notes) to browse t
 <div style="text-align: center;">
     <img src="images/notes.jpg" alt="Notes" />
 </div>
+
+## Schema:
+
+```mdx
+---
+title: Object oriented programming (OOP)
+description: Overview of Encapsulation, inheritance, polymorphism, and abstraction - and other topics.
+date: 03-28-2024
+status: published
+priority: 1000
+---
+```
