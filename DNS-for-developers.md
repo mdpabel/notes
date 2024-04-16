@@ -62,3 +62,20 @@ Storing the same data on secondary servers alongside the primary server is cruci
 3. **Geographic Distribution**: Secondary servers are often located in different geographic locations. This means that DNS queries can be responded to more quickly if a server is closer to the user, reducing latency and speeding up the overall response time for resolving domain names.
 
 4. **Disaster Recovery**: In the event of a catastrophic failure at the primary server location, secondary servers can act as a fail-safe, ensuring that DNS services can be quickly restored without loss of data.
+
+## Authoritative DNS servers
+
+Every DNS zone must have at least two name servers that serve its DNS records. These are the servers that store DNS records for domain names.
+
+Imagine the internet as a vast network of interconnected neighborhoods, with each neighborhood representing a domain (like ".com", ".org", ".uk", etc.). Now, each of these neighborhoods has its own community manager, responsible for keeping track of who lives where. These community managers are the authoritative DNS servers.
+
+When you host a website with a hosting provider like SiteGround, they provide you with their authoritative DNS servers, which in this case are ns1.siteground.net and ns2.siteground.net.
+
+By connecting your domain to these authoritative DNS servers through your domain registrar's settings, you're essentially telling the internet, "Hey, if anyone asks where to find my website, go ask ns1.siteground.net and ns2.siteground.net. They're the experts who know where everything about my website is stored."
+
+So, when someone types in your domain name (e.g., www.yourdomain.com), their browser reaches out to these authoritative DNS servers to get the information it needs to locate your website. These authoritative DNS servers then provide the necessary information, like the IP address where your website is hosted, allowing the browser to load your site.
+
+## Recursive queries:
+
+Authoritative DNS servers are the servers that store DNS records for domain names. But applications like browsers don't query authoritative DNS directly. There are quite a few paths DNS queries can travels before
+they return the requested DNS records.
