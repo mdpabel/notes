@@ -3,7 +3,7 @@ Title: Cyber Security Vendor Blacklist Submission Contacts
 Description: Contact details to dispute false positives and request removal from antivirus vendor blacklists
 date: 03-28-2024
 status: published
-priority: 1000
+priority: 950
 ---
 
 | **ENGINE**                     | **Contact**                                                                                                            |
