@@ -18,7 +18,7 @@ In Java, memory for objects is allocated on the heap when they are created.
 
 Static members belong to the class rather than any object instance, allowing Java to create methods and variables that belong to the class as a whole.
 
-```java
+```java:class.java
 public class House {
     private int windows;
     private int doors;
