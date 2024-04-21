@@ -3,7 +3,7 @@ title: Cyber Security Vendor Blacklist Submission Contacts
 description: Contact details to dispute false positives and request removal from antivirus vendor blacklists
 date: 04-22-2024
 status: published
-priority: 950
+priority: 951
 ---
 
 Below is the list of search engines or cybersecurity companies we can assist in removing blacklists: To search for vendors or search engines in the blacklist, utilize the Ctrl + F shortcut on Windows, and for Mac or Linux users, use the Command + F shortcut, making it quick and easy to locate specific entries within the list.
