@@ -158,3 +158,7 @@ priority: 950
 | Yandex                         | yandex-antivir@support.yandex.ru                                                                                       |
 | Zillya                         | virus@zillya.com                                                                                                       |
 | ZoneAlarm                      | zonealarm_VT_reports@checkpoint.com                                                                                    |
+
+### Resources:
+
+1. https://gist.github.com/skmedix/6cdce9d6d3b464c1bd719b72d1f6bce4
