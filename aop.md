@@ -2,7 +2,7 @@
 title: Aspect-Oriented Programming (AOP)
 description: Aspect-Oriented Programming in spring boot
 date: 03-28-2024
-isPublished: true
+status: published
 priority: 997
 ---
 
