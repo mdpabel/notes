@@ -2,7 +2,7 @@
 title: Javascript
 description: Javascript
 date: 03-24-2024
-status: published
+status: JavaScript Concepts like Prototypes, Symbols, Generators and More
 priority: 1
 ---
 
