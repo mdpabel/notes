@@ -1,3 +1,11 @@
+---
+title: Algorithms
+description: Implementations of algorithms
+date: 03-24-2024
+status: draft
+priority: 1
+---
+
 ## Minimum Spanning Tree
 
 1. https://leetcode.com/problems/min-cost-to-connect-all-points/
