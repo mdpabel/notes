@@ -2,7 +2,7 @@
 title: Javascript
 description: Javascript
 date: 03-24-2024
-status: published
+isPublished: true
 priority: 1
 ---
 

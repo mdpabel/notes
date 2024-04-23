@@ -2,7 +2,7 @@
 title: Object oriented programming (OOP)
 description: Overview of Encapsulation, inheritance, polymorphism, and abstraction - and other topics.
 date: 03-28-2024
-status: published
+isPublished: true
 priority: 1000
 ---
 
