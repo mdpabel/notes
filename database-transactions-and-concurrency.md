@@ -2,7 +2,7 @@
 title: Database Transactions and Concurrency
 description: Database Transactions, Concurrency, and Isolation Levels.
 date: 04-01-2024
-status: published
+isPublished: true
 priority: 998
 ---
 
@@ -11,7 +11,7 @@ A transaction is a sinlge unit of work that execute one or more SQL statements. 
 ```sql
 START TRANSACTION;
 
-INSERT INTO orders (customer_id, order_date, status)
+INSERT INTO orders (customer_id, order_date, isPublished)
 VALUES (1, '2024-04-01', 1);
 
 INSERT INTO order_items (order_id, product_id, quantity, unit_price)

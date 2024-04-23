@@ -2,7 +2,7 @@
 title: Database Management System (DBMS)
 description: Everything about database management systems
 date: 04-07-2024
-status: draft
+isPublished: false
 priority: 1
 ---
 

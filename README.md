@@ -21,7 +21,7 @@ Visit [https://www.mdpabel.com/notes](https://www.mdpabel.com/notes) to browse t
 title: Object oriented programming (OOP)
 description: Overview of Encapsulation, inheritance, polymorphism, and abstraction - and other topics.
 date: 03-28-2024
-status: published
+isPublished: published
 priority: 1000
 ---
 ```

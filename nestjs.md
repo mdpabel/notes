@@ -2,7 +2,7 @@
 title: Graph Data Structure
 description: Implementations of graph data structures in Java
 date: 03-24-2024
-status: draft
+isPublished: true
 priority: 1
 ---
 
@@ -80,7 +80,7 @@ import {
   Param,
   Post,
   Body,
-  HttpStatus,
+  HttpisPublished,
   HttpCode,
   Patch,
   Delete,
@@ -101,7 +101,7 @@ export class CoffeesController {
   }
 
   @Get('/:id')
-  @HttpCode(HttpStatus.OK)
+  @HttpCode(HttpisPublished.OK)
   findOne(@Param('id') id: number) {
     // Retrieve a specific coffee by ID
   }

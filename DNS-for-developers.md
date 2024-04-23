@@ -2,7 +2,7 @@
 title: DNS for Developers
 description: DNS principles and real-world applications tailored for developers.
 date: 04-15-2024
-status: published
+isPublished: true
 priority: 999
 ---
 
