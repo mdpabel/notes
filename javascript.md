@@ -14,7 +14,6 @@ before its execution.
 
 - Global execution context
 - Function execution context
-- Referennce to the outer environment, In the case of a global context, there is no outer environment, so reference to the outer environment is set to null.
 
 ### Global execution context
 
@@ -22,6 +21,7 @@ Global code, i.e., the code that is not inside a function, is executed inside a 
 
 - The global context contains the global variables, functions, etc.
 - A reference to the outer environment, in the case of a global execution context, is null.
+- Referennce to the outer environment, In the case of a global context, there is no outer environment, so reference to the outer environment is set to null.
 
 ### Function execution context
 
