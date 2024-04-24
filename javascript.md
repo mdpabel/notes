@@ -113,3 +113,32 @@ Call Stack:
 4. Once A() completes, it's popped off the stack.
 5. B() then completes, and it's popped off the stack.
 6. Finally, C() completes, and it's popped off the stack.
+
+## Hoisting
+
+### var declarations
+
+Hoisting in JavaScript allows variables and functions to be accessed before they are actually declared within their respective scopes. This behavior occurs because JavaScript preprocesses the code before executing it.
+
+For example, if you have this code:
+
+```js
+console.log(result); // undefined
+var result = 5 + 10;
+```
+
+During preprocessing, JavaScript treats **var result;** as if it's at the beginning of the scope. So, **console.log(result)** doesn't raise an error but logs undefined, as result has been declared but not yet assigned a value. Later in the code, result is assigned the value of 5 + 10, making it 15.
+
+This is made possible because of the parsing step before the code is executed. The preprocessing of the JavaScript code before its execution allows the JavaScript engine to detect some errors early before any code is executed. The following code example shows this in action:
+
+```js
+function print(obj) {
+  console.log(obj; // error
+}
+console.log("hello world");
+```
+
+In this code, there's a syntax error in the print function due to a missing closing parenthesis. Normally, if a function isn't called, JavaScript doesn't check its syntax errors until it's invoked. So, you might expect the code to log "hello world" without throwing any errors.
+However, JavaScript's preprocessing detects syntax errors as it scans the code before execution.
+
+### Function declarations
