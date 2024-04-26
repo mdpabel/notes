@@ -1,5 +1,3 @@
-console.log(a);
+console.log(new A());
 
-function test() {
-  var a = 10;
-}
+var A = class {};
