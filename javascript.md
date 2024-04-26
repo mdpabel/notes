@@ -116,6 +116,8 @@ Call Stack:
 
 ## Hoisting
 
+Hoisting in JavaScript is a process in which all the Variables, Functions and Class defination are declared BEFORE execution of the code. Variables are initialised to UNDEFINED when they are declared and the function’s name is registered as a variable in the scope containing the function declaration, and it is initialized with the function itself.
+
 ### var declarations
 
 Hoisting in JavaScript allows variables and functions to be accessed before they are actually declared within their respective scopes. This behavior occurs because JavaScript preprocesses the code before executing it.
@@ -142,3 +144,65 @@ In this code, there's a syntax error in the print function due to a missing clos
 However, JavaScript's preprocessing detects syntax errors as it scans the code before execution.
 
 ### Function declarations
+
+The function’s name is registered as a variable in the scope containing the function declaration, and it is initialized with the function itself.
+
+```js
+a();
+function a() {}
+```
+
+### Class declarations
+
+Like function declarations, class declarations are also hoisted, while we can access a function declaration before its declaration, we cannot do the same in the case of class declarations
+
+```js
+const A = 'TEST';
+
+if (true) {
+  console.log(A); // ReferenceError: Cannot access 'A' before initialization
+
+  class A {}
+}
+```
+
+If the class declarations weren’t hoisted, then the console.log function call should have logged "TEST" to the console, but that isn’t the case, and that is because the class declaration inside the if block is hoisted and any code, before or after the class A declaration inside the block, that accesses class A will access the class declaration and not the A variable declared above the if statement.
+
+So, if class declarations are hoisted, then why can’t we access them before their declaration? The answer to this question is the “Temporal Dead Zone (TDZ)”.
+
+### Temporal Dead Zone
+
+Temporal Dead Zone (TDZ)³⁵ is the area where the variables (let, const) or class declarations cannot be accessed. It starts from the start of the scope till the declaration is executed.
+
+```js
+// TDZ start
+console.log('TEST');
+
+let num = 1; // TDZ end
+// can access the num after TDZ ends
+```
+
+As TDZ also applies to the let and const, are the variables declared using let or constants using const also hoisted? Yes, they are also hoisted, but, like the class declarations, they are hoisted differently because of the TDZ.
+
+```js
+const A = 'Outside';
+
+if (true) {
+  console.log(A); // ReferenceError: Cannot access 'A' before initialization
+
+  const A = 'Inside';
+}
+```
+
+### Function and class expressions
+
+The function and class expression are not hoisted.
+
+```js
+console.log(A); // undefined
+console.log(new A()); // TypeError: A is not a constructor
+
+var A = class {};
+```
+
+We can access them before their declaration, and their value are undefined. This is because only the declarations are hoisted, not their values.
