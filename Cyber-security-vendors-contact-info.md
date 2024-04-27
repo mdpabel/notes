@@ -156,6 +156,8 @@ Below is the list of search engines or cybersecurity companies we can assist in 
 | VirIT                          | virustotal@viritpro.com                                                                                                |
 | VirusDie                       | partners@virusdie.com                                                                                                  |
 | Webroot                        | [Webroot Submit](https://www.webroot.com/us/en/business/support/vendor-dispute-contact-us)                             |
+| Webroot                        | [Webroot Submit](https://www.brightcloud.com/tools/change-request.php)                                                 |
+| Webroot                        | [Webroot Submit](https://detail.webrootanywhere.com/servicewelcome.asp?reason=talknotallowed&)                         |
 | Xcitium Verdict Cloud (Comodo) | support@xcitium.com                                                                                                    |
 | Yandex                         | yandex-antivir@support.yandex.ru                                                                                       |
 | Zillya                         | virus@zillya.com                                                                                                       |
