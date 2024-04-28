@@ -208,3 +208,45 @@ var A = class {};
 ```
 
 We can access them before their declaration, and their value are undefined. This is because only the declarations are hoisted, not their values.
+
+## Scope
+
+The scope refers to the parts of the program where a particular variable, function, etc., can be accessed.
+
+- Global scope
+- Function scope
+- Block scope
+- Module scope
+
+### Lexical scope
+
+In JS, the scope is determined at compile time. This means that before the step-by-step execution of the JavaScript code starts, JavaScript engines determine the scopes of different declarations in the code. Scopes can be nested within other scopes, with each nested scope having access to the outer or parent scope.
+
+```js
+const name = 'MD'; // variable declaration
+
+// function declaration
+function greet() {
+  const message = `name ${name}`; // variable declaration
+  console.log(message);
+}
+```
+
+The scope of the above declarations depends on where they are written in the code structure above.
+
+- The myName variable and hello function are both in global scope, so they are available globally in the above code.
+- The message variable declaration is inside the greet function, so its a local variable of greet().
+
+Lexical scope is the ability for a function scope to access variables from the parent scope.
+
+**In JavaScript, the global scope is the browser window. Variables created using the var keyword or function declarations declared in the global scope are added as properties on the window object**
+
+```js
+var name = 'A';
+const age = 25;
+function test() {}
+
+window.hasOwnProperty('name'); // true
+window.hasOwnProperty('test'); // true
+window.hasOwnProperty('age'); // false
+```
