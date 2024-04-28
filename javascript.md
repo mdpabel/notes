@@ -250,3 +250,35 @@ window.hasOwnProperty('name'); // true
 window.hasOwnProperty('test'); // true
 window.hasOwnProperty('age'); // false
 ```
+
+## Coercion
+
+Type coercion is the automatic or implicit conversion of values from one data type to another (such as strings to numbers).
+
+```js
+console.log('20' - 10);
+```
+
+whereas type conversion involves explicitly converting data from one type to another.
+
+```
+Number("10")
+```
+
+Whenever JavaScript sees a value of one type in a context that expects a value of a different type, it tries to coerce or convert the value into the expected type. "20" is the unexpected value type because the operation is subtraction.
+
+To deep dive into the world of coercion, let us understand the following:
+
+- Abstract operations
+- Abstract equality operator (==)
+- Addition operation (+)
+- Relational operators (<, >, <=, >=)
+
+### Abstract operations:
+
+There are many mechanisms that are used by the JavaScript language to convert one type of value into another type of value. These mechanisms are known as **abstract operations**. There are many abstract operations:
+
+- ToPrimitive : The ToPrimitive abstract operation is used to convert an object to a primitive value.
+- ToNumber
+- ToString
+- ToBoolean

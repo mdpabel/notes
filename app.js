@@ -1,3 +1,1 @@
-console.log(new A());
-
-var A = class {};
+console.log(Number('10'));
