@@ -1,8 +1,8 @@
 ---
 title: Javascript
-description: Javascript
+description: JavaScript Concepts like Prototypes, Symbols, Generators and More
 date: 03-24-2024
-status: JavaScript Concepts like Prototypes, Symbols, Generators and More
+status: published
 priority: 1
 ---
 
