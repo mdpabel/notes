@@ -168,6 +168,8 @@ if (true) {
 
 If the class declarations weren’t hoisted, then the console.log function call should have logged "TEST" to the console, but that isn’t the case, and that is because the class declaration inside the if block is hoisted and any code, before or after the class A declaration inside the block, that accesses class A will access the class declaration and not the A variable declared above the if statement.
 
+In JavaScript, class declarations themselves are not hoisted in the same way that function declarations are. However, the identifiers (class names) of class declarations are hoisted within the block scope. This means you can reference the class name before its declaration, but not its content.
+
 So, if class declarations are hoisted, then why can’t we access them before their declaration? The answer to this question is the “Temporal Dead Zone (TDZ)”.
 
 ### Temporal Dead Zone
