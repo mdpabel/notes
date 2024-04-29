@@ -278,7 +278,243 @@ To deep dive into the world of coercion, let us understand the following:
 
 There are many mechanisms that are used by the JavaScript language to convert one type of value into another type of value. These mechanisms are known as **abstract operations**. There are many abstract operations:
 
-- ToPrimitive : The ToPrimitive abstract operation is used to convert an object to a primitive value.
+- ToPrimitive
 - ToNumber
 - ToString
 - ToBoolean
+
+## ToPrimitive :
+
+The ToPrimitive abstract operation is used to convert an object to a primitive value. This operation takes two arguments:
+
+- input: an object that should be converted into a primitive value
+- preferredType: an optional second argument that specifies the type that should be favored when converting an object into a primitive value.
+
+This operation invokes another abstract operation known as OrdinaryToPrimitive to do the actual conversion, and it also takes two arguments:
+
+- O: an object that should be converted into a primitive value
+- hint: a type that should be favored when converting an object to a primitive value
+
+Each object in JavaScript inherits the following two methods from the object that sits at the top of the inheritance hierarchy, i.e., the Object.prototype object:
+
+**toString( )**: The toString method is used to convert an object into its string representation.
+
+**valueOf( )**: The valueOf method is used to convert an object into a primitive value.
+
+The OrdinaryToPrimitive abstract operation invokes the toString and the valueOf methods to convert an object into a primitive value. **The hint argument received by the OrdinaryToPrimitive abstract operation determines which of these two methods is called first.**
+
+### Prefer string:
+
+If the hint argument is “string”, then the OrdinaryToPrimitive abstract operation first invokes
+the toString method on the object. if the toString method doesn’t return a primitive value, the valueOf method
+will be invoked to get a primitive representation of the object. . otherwise, a TypeError is thrown, indicating that the object couldn’t be converted to a primitive value.
+
+```js
+const obj = {
+  toString() {
+    return 'abc';
+  },
+  valueOf() {
+    return 123;
+  },
+};
+
+console.log(`${obj}`); // abc
+```
+
+we are trying to log obj, embedded in a template literal, to the console. In this case, the obj will be converted into a string. Here the hint argument of the OrdinaryToPrimitive abstract operation is “string”.
+
+The next case we need to verify is what happens if the toString method doesn’t return a primitive value. The following code example demonstrates this case.
+
+```js
+const obj = {
+  toString() {
+    return {};
+  },
+  valueOf() {
+    return 123;
+  },
+};
+
+console.log(`${obj}`); // 123
+```
+
+if the toString method doesn’t return a primitive value, the valueOf method will be invoked to get a primitive representation of the object.
+
+The valueOf method is invoked even if the toString is not defined for an object.
+
+```js
+const obj = {
+  toString: undefined,
+  valueOf() {
+    return 123;
+  },
+};
+
+console.log(`${obj}`);
+```
+
+The last case we need to verify is what happens when JavaScript can’t get a primitive value, even after invoking the toString and the valueOf method.
+
+```js
+const obj = {
+  toString() {
+    return [];
+  },
+  valueOf() {
+    return [];
+  },
+};
+
+console.log(`${obj}`); // TypeError: Cannot convert object to primitive value
+```
+
+### Prefer number:
+
+If the hint argument is “number”, then the OrdinaryToPrimitive abstract operation first invokes the valueOf method and then the toString method, if needed.
+
+```js
+const obj = {
+  toString() {
+    return 'abc';
+  },
+  valueOf() {
+    return 123;
+  },
+};
+
+console.log(1 + obj); //124
+```
+
+What will happen if the valueOf method returns a boolean value? It is a primitive value. It is not a number but still a primitive value. So JavaScript should accept it as a primitive representation of the obj.
+
+```js
+const obj = {
+  toString() {
+    return 'abc';
+  },
+  valueOf() {
+    return true;
+  },
+};
+
+console.log(1 + obj); // 2
+```
+
+### No preference
+
+## ToNumber
+
+| Value     | ToNumber(value) |
+| --------- | --------------- |
+| ""        | 0               |
+| "0"       | 0               |
+| "-0"      | -0              |
+| " 123 "   | 123             |
+| "45"      | 45              |
+| "abc"     | NaN             |
+| false     | 0               |
+| true      | 1               |
+| undefined | NaN             |
+| null      | 0               |
+
+## ToString
+
+| Value     | ToNumber(value) |
+| --------- | --------------- |
+| null      | "null"          |
+| undefined | "undefined"     |
+| 0         | "0"             |
+| -0        | "0"             |
+| true      | "true"          |
+| false     | "false"         |
+| 123       | "123"           |
+| NaN       | "NaN"           |
+
+## ToBoolean
+
+falsy values:
+
+- false
+- 0, -0, 0n
+- undefined
+- null
+- NaN
+- ""
+
+### 0 == false
+
+1. As the types are not equal and one of the operands is a boolean, the boolean operand is
+   converted into a number using the ToNumber⁷⁴ abstract operation.
+2. Now the types are equal (0 == 0)
+3. Now the types are equal.
+
+### "" == false
+
+1. The boolean operand false is converted into a number using the ToNumber abstract operation, resulting in 0.
+   "" == 0
+2. Recall that the abstract equality operator and string operand is converted into a number using the ToNumber abstract operation. "" converted to 0.
+   0 == 0
+3. Now the types are equal.
+
+### 0 == []
+
+1. The array is converted into a primitive value using the ToPrimitive abstract operation.
+   0 == ""
+2. Next, the string will be converted into a number.
+   0 == 0
+3. Now the types are equal.
+
+### [123] == 123
+
+1. The array is converted into a primitive value using the ToPrimitive abstract operation.
+   '123' == 123
+2. Next, the string will be converted into a number.
+   123 == 123
+3. Now the types are equal.
+
+### [1] < [2]
+
+1. The array is converted into a primitive value using the ToPrimitive abstract operation.
+   "1" < "2"
+2. Now the types are equal. "1" < "2", giving us true as an output because the strings are compared using their Unicode code points.
+
+### [] == ![]
+
+The Not operator has a higher precedence than the equality operator, so the subexpression ![] is evaluated first.
+
+1. The Not operator converts true into false, and vice versa using toBoolean() abstract operation.
+   [] == false
+2. [] == 0
+3. "" == 0
+4. 0 == 0
+5. true
+
+### !!"true" == !!"false"
+
+the precedence of the logical Not operator is higher, so the sub-expressions !!"true" and !!"false" will be evaluatedfirst.
+
+1. true == true (using the toBoolean() abstract operation)
+2. true
+
+### [1, 2, 3] + [4, 5, 6]
+
+1. "1,2,3" + "4,5,6"
+2. "1,2,34,5,6"
+
+### [undefined] == 0
+
+1. "" == 0
+2. 0 == 0
+3. true
+
+### [[]] == ''
+
+JavaScript converts Arrays elements into strings and then joins them using commas. So, first the nested empty array will be converted into a primitive value (empty string). Then the outer array is also converted into an empty string.
+
+1. "" == ""
+
+### [] + {}
+
+1. "" == "[object object]"
+2. "[object object]"
