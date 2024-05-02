@@ -283,7 +283,7 @@ There are many mechanisms that are used by the JavaScript language to convert on
 - ToString
 - ToBoolean
 
-## ToPrimitive :
+#### ToPrimitive :
 
 The ToPrimitive abstract operation is used to convert an object to a primitive value. This operation takes two arguments:
 
@@ -303,7 +303,7 @@ Each object in JavaScript inherits the following two methods from the object tha
 
 The OrdinaryToPrimitive abstract operation invokes the toString and the valueOf methods to convert an object into a primitive value. **The hint argument received by the OrdinaryToPrimitive abstract operation determines which of these two methods is called first.**
 
-### Prefer string:
+##### Prefer string:
 
 If the hint argument is “string”, then the OrdinaryToPrimitive abstract operation first invokes
 the toString method on the object. if the toString method doesn’t return a primitive value, the valueOf method
@@ -369,7 +369,7 @@ const obj = {
 console.log(`${obj}`); // TypeError: Cannot convert object to primitive value
 ```
 
-### Prefer number:
+##### Prefer number:
 
 If the hint argument is “number”, then the OrdinaryToPrimitive abstract operation first invokes the valueOf method and then the toString method, if needed.
 
@@ -401,9 +401,9 @@ const obj = {
 console.log(1 + obj); // 2
 ```
 
-### No preference
+##### No preference
 
-## ToNumber
+#### ToNumber
 
 | Value     | ToNumber(value) |
 | --------- | --------------- |
@@ -418,7 +418,7 @@ console.log(1 + obj); // 2
 | undefined | NaN             |
 | null      | 0               |
 
-## ToString
+#### ToString
 
 | Value     | ToNumber(value) |
 | --------- | --------------- |
@@ -431,7 +431,7 @@ console.log(1 + obj); // 2
 | 123       | "123"           |
 | NaN       | "NaN"           |
 
-## ToBoolean
+#### ToBoolean
 
 falsy values:
 
@@ -442,14 +442,14 @@ falsy values:
 - NaN
 - ""
 
-### 0 == false
+##### 0 == false
 
 1. As the types are not equal and one of the operands is a boolean, the boolean operand is
    converted into a number using the ToNumber⁷⁴ abstract operation.
 2. Now the types are equal (0 == 0)
 3. Now the types are equal.
 
-### "" == false
+##### "" == false
 
 1. The boolean operand false is converted into a number using the ToNumber abstract operation, resulting in 0.
    "" == 0
@@ -457,7 +457,7 @@ falsy values:
    0 == 0
 3. Now the types are equal.
 
-### 0 == []
+##### 0 == []
 
 1. The array is converted into a primitive value using the ToPrimitive abstract operation.
    0 == ""
@@ -465,7 +465,7 @@ falsy values:
    0 == 0
 3. Now the types are equal.
 
-### [123] == 123
+##### [123] == 123
 
 1. The array is converted into a primitive value using the ToPrimitive abstract operation.
    '123' == 123
@@ -473,13 +473,13 @@ falsy values:
    123 == 123
 3. Now the types are equal.
 
-### [1] < [2]
+##### [1] < [2]
 
 1. The array is converted into a primitive value using the ToPrimitive abstract operation.
    "1" < "2"
 2. Now the types are equal. "1" < "2", giving us true as an output because the strings are compared using their Unicode code points.
 
-### [] == ![]
+##### [] == ![]
 
 The Not operator has a higher precedence than the equality operator, so the subexpression ![] is evaluated first.
 
@@ -490,31 +490,271 @@ The Not operator has a higher precedence than the equality operator, so the sube
 4. 0 == 0
 5. true
 
-### !!"true" == !!"false"
+##### !!"true" == !!"false"
 
 the precedence of the logical Not operator is higher, so the sub-expressions !!"true" and !!"false" will be evaluatedfirst.
 
 1. true == true (using the toBoolean() abstract operation)
 2. true
 
-### [1, 2, 3] + [4, 5, 6]
+##### [1, 2, 3] + [4, 5, 6]
 
 1. "1,2,3" + "4,5,6"
 2. "1,2,34,5,6"
 
-### [undefined] == 0
+##### [undefined] == 0
 
 1. "" == 0
 2. 0 == 0
 3. true
 
-### [[]] == ''
+##### [[]] == ''
 
 JavaScript converts Arrays elements into strings and then joins them using commas. So, first the nested empty array will be converted into a primitive value (empty string). Then the outer array is also converted into an empty string.
 
 1. "" == ""
 
-### [] + {}
+##### [] + {}
 
 1. "" == "[object object]"
 2. "[object object]"
+
+## Closures
+
+The closure is a a function along with a reference to the environment in which it is created.
+
+1. A function
+2. A reference to the environment/scope in which that function is created
+
+Closures allow a nested function to access the declarations inside the parent function, even after the execution of the parent function has ended.
+
+```javascript
+// https://leetcode.com/problems/memoize-ii/description/
+function keyGenerator() {
+  let count = 0;
+  const map = new Map();
+
+  return function (input) {
+    if (map.has(input)) {
+      return map.get(input);
+    }
+    map.set(input, ++count);
+    return count;
+  };
+}
+
+function memoize(fn) {
+  const cacheKeyGenerator = keyGenerator();
+  const cache = new Map();
+
+  return function (...args) {
+    const numbers = args.map(cacheKeyGenerator);
+    const key = numbers.join(',');
+
+    if (cache.has(key)) {
+      return cache.get(key);
+    }
+    const result = fn(...args);
+    cache.set(key, result);
+
+    return result;
+  };
+}
+
+
+let callCount = 0;
+const memoizedFn = memoize(function (a, b) {
+ *	 callCount += 1;
+  return a + b;
+})
+memoizedFn(2, 3) // 5
+memoizedFn(2, 3) // 5
+console.log(callCount) // 1
+
+```
+
+### Scope chain
+
+When you reference a variable within a function, JavaScript searches for that variable in a series of nested scopes, starting from the innermost function scope and moving outward until it finds the variable or reaches the global scope. This process forms what is known as the scope chain.
+
+```js
+var globalVar = "I'm global";
+
+function outerFunction() {
+  var outerVar = "I'm outer";
+
+  function innerFunction() {
+    var innerVar = "I'm inner";
+    console.log(innerVar); // Accessible here
+    console.log(outerVar); // Accessible here
+    console.log(globalVar); // Accessible here
+  }
+
+  innerFunction();
+  console.log(innerVar); // Not accessible here
+}
+
+outerFunction();
+console.log(outerVar); // Not accessible here
+console.log(globalVar); // Accessible here
+```
+
+**How are different scopes linked?**
+The answer is the hidden internal slot named [[Environment]] or [[Scope]].
+
+This [[Environment]] or [[Scope]] internal slot exists on the functions, and it contains a reference to the outer
+scope/environment. In other words, this internal slot contains a reference to the scope on which the
+containing function has closed over or formed a closure.
+
+In the code example above, when the outer function is created, as it is created in the global scope, a reference to the global environment is saved in the internal [[Environment]] slot of the function object.
+
+```js
+const a = 10;
+function outer() {
+  function inner() {
+    console.log(a);
+  }
+  inner();
+}
+```
+
+In this code example, we have three different environments:
+
+1. global environment
+2. local environment of outer function
+3. local environment of inner function
+
+```bash
+   .-----------------------------------------------------------.
+   |                  Global Environment                      |
+   |                  [[Environment]]                         |
+   |                  a: 10                                   |
+   '-----------------------------------------------------------'
+             |
+             | [[OuterEnv]]
+             |
+   .-----------------------------------------------------------.
+   |               Outer Function Environment                  |
+   |               [[Environment]]                            |
+   |               inner: function                            |
+   '-----------------------------------------------------------'
+             |
+             | [[OuterEnv]]
+             |
+   .-----------------------------------------------------------.
+   |               Inner Function Environment                  |
+   |               [[Environment]]                            |
+   '-----------------------------------------------------------'
+```
+
+### Closures in loop
+
+```js
+for (var i = 1; i < 3; i++) {
+  setTimeout(() => {
+    console.log(i);
+  }, 1000);
+}
+// output
+// 3;
+// 3;
+// 3;
+```
+
+The callback function of each setTimeout forms a closure over the same variable i. As there are a total of two
+loop iterations in our example, setTimeout is called three times, so we have two callback functions, all having a closure over the same variable i.
+
+The callback function of each setTimeout call is invoked after the loop execution has completed. The value of variable i after the last iteration of the loop is “3”, and because each callback function of the “setTimeout” has a closure over the same variable i, all two of them see “3” as the value of the i. This is the reason they all log “3” on the console.
+
+```bash
+   .-----------------------------------------------------------.
+   |                  Global Environment                      |
+   |                  [[Environment]]                         |
+   |                  i: 3                                    |
+   |                  setTimeout1: function() {...}           |
+   |                  setTimeout2: function() {...}           |
+   |                  setTimeout3: function() {...}           |
+   '-----------------------------------------------------------'
+       |                             |
+       | [[OuterEnv]]                |
+       |                             |
+   .-------------------------.       |
+   |setTimeout1 Environment  |       |
+   |    [[Environment]]      |       |
+   |     i: 3                |       |
+   '-------------------------'       |
+                                     |
+                                     | [[OuterEnv]]
+                                     |
+   .-----------------------------------------------------------.
+   |        setTimeout2 Callback Function Environment          |
+   |               [[Environment]]                             |
+   |               i: 3                                       |
+   '-----------------------------------------------------------'
+```
+
+**Solution: 1**
+with the use of an IIFE, we can pass the value of i in each iteration to the IIFE as a parameter.This solves the problem because the counter parameter is closed over by each callback function, and in each iteration, a new IIFE is created, along with the new callback function of setTimeout.
+
+```js
+for (var i = 1; i < 3; i++) {
+  ((counter) => {
+    setTimeout(() => {
+      console.log(counter);
+    }, 1000);
+  })(i);
+}
+```
+
+```bash
+   .------------------------------------------------.
+   |               Global Environment               |
+   |                 [[Environment]]                |
+   |                 i: undefined                   |
+   '------------------------------------------------'
+             |                                 |
+             | [[OuterEnv]]                    |
+             |                                 |
+   .------------------------------.            |
+   |   IIFE Environment (i=1)     |            |
+   |      [[Environment]]         |            |
+   |       counter: 1             |            |
+   '------------------------------'            |
+           |                                   |
+           | [[OuterEnv]]                      |
+           |                                   |
+   .-----------------------------------.       |
+   |    setTimeout1 Environment        |       |
+   |      [[Environment]]              |       |
+   |      (Captures IIFE environment)  |       |
+   |      counter: 1                   |       |
+   '-----------------------------------'       |
+                                               |
+                                               | [[OuterEnv]]
+                                               |
+   .-----------------------------------------------------------.
+   |          Anonymous Function Environment (i=2)             |
+   |                  [[Environment]]                         |
+   |                  counter: 2                               |
+   '-----------------------------------------------------------'
+                     |
+                     | [[OuterEnv]]
+                     |
+   .-----------------------------------------------------------.
+   |        setTimeout2 Callback Function Environment          |
+   |               [[Environment]]                            |
+   |               (Captures anonymous function environment)  |
+   |               counter: 2                                 |
+   '-----------------------------------------------------------'
+```
+
+**Solution: 2**
+Using the let keyword solves this problem because, unlike each callback function closing over the same variable i, the let being block-scoped causes each iteration of the loop to have a different copy of the variable i.
+
+```js
+for (let i = 1; i < 3; i++) {
+  setTimeout(() => {
+    console.log(i);
+  }, 1000);
+}
+```

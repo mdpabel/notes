@@ -1,10 +1,7 @@
-const obj = {
-  toString() {
-    return 'abc';
-  },
-  valueOf() {
-    return true;
-  },
-};
-
-console.log(1 + obj);
+for (var i = 1; i < 3; i++) {
+  ((counter) => {
+    setTimeout(() => {
+      console.log(counter);
+    }, 1000);
+  })(i);
+}
