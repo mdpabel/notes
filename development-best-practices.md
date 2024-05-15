@@ -40,6 +40,11 @@ project/
 │   │   ├── validation.js
 │   │   └── ...
 │   │
+│   ├── interfaces/
+│   │   ├── auth.interface.js
+│   │   ├── user.interface.js
+│   │   └── ...
+│   │
 │   ├── config/
 │   │   └── database.js
 │   │
