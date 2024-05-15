@@ -109,6 +109,8 @@ addgroup md && adduser -S -G md md
 
 ### Setting the users
 
+When you use USER app in a Dockerfile, it only sets the user for subsequent RUN, CMD, and ENTRYPOINT commands, not for COPY commands. The COPY command operates at the filesystem level within the Docker image and does not inherit the user set by USER.
+
 ```dockerfile
 # ---
 RUN addgroup app && adduser -S -G app app
@@ -396,4 +398,35 @@ services:
 
 volumes:
   vidly:
+```
+
+### validate and display the configuration
+
+```bash
+docker-compose -f file-name.yml config
+```
+
+### Use Compose Watch
+
+```yml
+services:
+  app:
+    container_name: NodeJs
+    build: .
+    command: npm run dev
+    ports:
+      - 3000:3000
+    develop:
+      watch:
+        - action: sync
+          path: ./
+          target: /app
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: package.json
+```
+
+```bash
+docker-compose up --build --watch
 ```
