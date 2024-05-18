@@ -79,3 +79,58 @@ So, when someone types in your domain name (e.g., www.yourdomain.com), their bro
 
 Authoritative DNS servers are the servers that store DNS records for domain names. But applications like browsers don't query authoritative DNS directly. There are quite a few paths DNS queries can travels before
 they return the requested DNS records.
+
+## Common DNS Record Types
+
+### A Record (Address Record):
+
+Maps a domain directly to an IP address. Best for primary domain mappings.
+
+**IN:** The class of the DNS record (Internet).
+
+```bash
+example.com.    IN    A    192.0.2.1
+```
+
+![A & CNAME Record](images/DNS_A_CNAME.png)
+
+### CNAME Record (Canonical Name Record):
+
+Maps a domain to another domain, which then resolves to an IP address. Best for subdomains and making DNS management simpler.
+
+When you set up a CNAME record for www.nextgenwordpress.com to point to cname.vercel-dns.com, here's what happens:
+
+1. **User Types the URL:** Someone types www.nextgenwordpress.com in their browser.
+2. **DNS Lookup:** The browser asks DNS servers to find the IP address for www.nextgenwordpress.com.
+3. **CNAME Record:** The DNS server finds that www.nextgenwordpress.com is an alias for cname.vercel-dns.com.
+4. **Resolve CNAME:** The DNS server then looks up the IP address for cname.vercel-dns.com.
+5. **Return IP Address:** The DNS server returns the IP address to the browser.
+6. **Browser Connects:** The browser connects to the Vercel server using this IP address.
+7. **Serve Content:** Vercel serves the website content for www.nextgenwordpress.com.
+
+To the user, it looks like they are accessing www.nextgenwordpress.com, but the content is actually being delivered from Vercel’s servers. The URL in the browser stays www.nextgenwordpress.com.
+
+```bash
+www.example.com.    IN    CNAME    example.com.
+```
+
+### AAAA Record (IPv6 Address Record):
+
+### MX Record (Mail Exchanger Record):
+
+Directs email to the appropriate mail server for a domain.
+
+```bash
+example.com.    IN    MX    10 mailserver1.example.com.
+example.com.    IN    MX    20 mailserver2.example.com.
+```
+
+![MX Record](images/DNS_MX.png)
+
+### TXT Record (Text Record):
+
+### NS Record (Name Server Record):
+
+```
+
+```
