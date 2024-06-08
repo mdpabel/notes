@@ -2,7 +2,7 @@
 title: Postgresql
 description: Postgresql
 date: 07-06-2024
-status: draft
+status: published
 priority: 997
 ---
 
