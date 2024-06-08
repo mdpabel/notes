@@ -50,7 +50,9 @@ CREATE TABLE departments (
     department_id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     department_name VARCHAR(100) UNIQUE NOT NULL
 );
+```
 
+```sql
 CREATE TABLE employees (
     employee_id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,      -- Primary Key Constraint
     first_name VARCHAR(50) NOT NULL,                                   -- Not Null Constraint
@@ -59,7 +61,9 @@ CREATE TABLE employees (
     salary NUMERIC(10, 2) CHECK (salary > 0),                          -- Check Constraint
     department_id INTEGER,                                             -- Foreign Key Column
     hire_date DATE DEFAULT CURRENT_DATE,                               -- Default Constraint
-    -- CONSTRAINT fk_department FOREIGN KEY(department_id) REFERENCES departments(department_id) -- Foreign Key Constraint
+    additional_info JSONB,                                             -- JSONB type column
+    skills TEXT[],                                                     -- Array type column
+    CONSTRAINT fk_department FOREIGN KEY(department_id) REFERENCES departments(department_id) -- Foreign Key Constraint
 );
 ```
 
@@ -107,10 +111,90 @@ DROP CONSTRAINT fk_department;
 ## INSERT
 
 ```sql
-INSERT INTO employees (first_name, last_name, email, salary, department_id)
-VALUES
-    ('John', 'Doe', 'john.doe@example.com', 50000, 1),
-    ('Jane', 'Smith', 'jane.smith@example.com', 60000, 2),
-    ('Alice', 'Johnson', 'alice.johnson@example.com', 55000, 1)
-RETURNING employee_id, first_name, last_name;
+INSERT INTO departments (department_name) VALUES
+('Finance'),
+('Engineering'),
+('Marketing');
+```
+
+```sql
+INSERT INTO employees (
+    first_name, last_name, email, salary, department_id, additional_info, skills
+) VALUES (
+    'MD', 'Pabel', 'mdpabel@gmail.com', 65000.00,
+    (SELECT department_id FROM departments WHERE department_name = 'Finance'),
+    '{"hobbies": ["sports"]}', ARRAY['JavaScript', 'Angular']
+)
+RETURING first_name, email, department_id; -- RETURNING Clause: Immediately get the values of inserted rows.
+```
+
+## UPSERT
+
+UPSERT, a combination of "INSERT" and "UPDATE".
+
+**If an employee's email already exists, update the salary, department_id, and additional_info.**
+
+```sql
+INSERT INTO employees (
+    first_name, last_name, email, salary, department_id, additional_info, skills
+) VALUES (
+    'MD', 'Pabel', 'mdpabel@gmail.com', 65000.00, 1, '{"hobbies": ["reading"]}', ARRAY['SQL', 'Python']
+)
+ON CONFLICT (email)
+DO UPDATE SET
+    salary = EXCLUDED.salary,
+    department_id = EXCLUDED.department_id,
+    additional_info = EXCLUDED.additional_info,
+    skills = EXCLUDED.skills;
+```
+
+**If an employee’s email already exists, do nothing.**
+
+```sql
+INSERT INTO employees (
+    first_name, last_name, email, salary, department_id, additional_info, skills
+) VALUES (
+    'MD', 'Pabel', 'mdpabel@gmail.com', 65000.00, 1, '{"hobbies": ["reading"]}', ARRAY['SQL', 'Python']
+)
+ON CONFLICT (email) DO NOTHING;
+```
+
+**Update only if the new salary is higher than the existing one.**
+
+```sql
+INSERT INTO employees (
+    first_name, last_name, email, salary, department_id, additional_info, skills
+) VALUES (
+    'Alice', 'Johnson', 'alice.johnson@example.com', 75000.00, 3, '{"hobbies": ["painting"]}', ARRAY['React', 'Node.js']
+)
+ON CONFLICT (email)
+DO UPDATE SET
+    salary = GREATEST(EXCLUDED.salary, employees.salary),
+    department_id = EXCLUDED.department_id,
+    additional_info = EXCLUDED.additional_info,
+    skills = EXCLUDED.skills;
+```
+
+Key Points
+
+- **Conflict Target:** Specify which column(s) to check for conflicts. It must be a unique or primary key constraint.
+- **EXCLUDED Keyword:** Refers to the row proposed for insertion that caused the conflict.
+- **Conditional Logic:** You can apply conditional logic in the DO UPDATE clause to handle conflicts more intelligently.
+
+### Using COPY for Bulk Inserts
+
+```csv
+employees.csv
+
+first_name,last_name,email,salary,department_id,hire_date,additional_info,skills
+John,Doe,john.doe@example.com,60000,1,2024-06-01,"{""hobbies"": [""reading""]}","{SQL,Python}"
+Jane,Smith,jane.smith@example.com,75000,2,2024-06-05,"{""hobbies"": [""music"",""hiking""]}","{Java,JavaScript}"
+Alice,Johnson,alice.johnson@example.com,68000,3,2024-06-06,"{""hobbies"": [""painting""]}","{React,Node.js}"
+Charlie,Brown,charlie.brown@example.com,55000,1,2024-06-01,"{""hobbies"": [""sports""]}","{JavaScript,Angular}"
+```
+
+```sql
+COPY employees (first_name, last_name, email, salary, department_id, hire_date, additional_info, skills)
+FROM '/path/to/employees.csv'
+WITH (FORMAT csv, DELIMITER ',', HEADER);
 ```
