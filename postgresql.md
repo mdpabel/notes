@@ -198,3 +198,138 @@ COPY employees (first_name, last_name, email, salary, department_id, additional_
 from '/docker_data/employees.csv'
 with (format csv, delimiter ',', header);
 ```
+
+## SELECTs
+
+```sql
+-- Employees with salary greater than 50000
+SELECT * FROM employees WHERE salary > 50000;
+
+-- Employees with a specific hobby
+SELECT * FROM employees WHERE additional_info->>'hobbies' @> '["sports"]';
+
+-- Employees with JavaScript skill
+SELECT * FROM employees WHERE 'JavaScript' = ANY(skills); -- ANY and ALL are used to compare a value to a set of values: SELECT * FROM students WHERE age >= ALL (ARRAY[18, 20, 22]);
+
+-- Employees with both JavaScript and Angular skills
+SELECT * FROM employees WHERE skills @> ARRAY['JavaScript', 'Angular'];
+
+-- Employees with first name starting with 'M'
+SELECT * FROM employees WHERE first_name LIKE 'M%';
+
+-- Case-insensitive search for first name starting with 'm'
+SELECT * FROM employees WHERE first_name ILIKE 'm%';
+
+-- Employees with salary between 40000 and 70000
+SELECT * FROM employees WHERE salary BETWEEN 40000 AND 70000;
+
+-- Employees with salary between 40000 and 70000
+SELECT * FROM employees WHERE salary BETWEEN 40000 AND 70000;
+
+-- Employees with no department assigned
+SELECT * FROM employees WHERE department_id IS NULL; -- Often used with NULL or boolean expressions.
+
+-- Employees with a salary of exactly 65000
+SELECT * FROM employees WHERE salary = 65000; -- Used to compare scalar values.
+
+-- Employees in Finance department with salary > 60000
+SELECT * FROM employees WHERE department_id = (SELECT department_id FROM departments WHERE department_name = 'Finance') AND salary > 60000;
+
+-- Employees in IT or HR department
+SELECT * FROM employees WHERE department_id IN (SELECT department_id FROM departments WHERE department_name IN ('Finance', 'Marketing'));
+
+-- Employees not earning more than 70000
+SELECT * FROM employees WHERE NOT (salary > 70000);
+
+-- Employees in specific departments
+SELECT * FROM employees WHERE department_id IN (SELECT department_id FROM departments WHERE department_name IN ('Finance', 'Marketing'));
+
+-- DISTINCT Departments
+SELECT DISTINCT department_id FROM employees;
+
+```
+
+#### Using CASE with SELECT
+
+```sql
+-- Categorize employees based on their salary:
+SELECT
+    first_name,
+    last_name,
+    salary,
+    CASE
+        WHEN salary >= 80000 THEN 'High'
+        WHEN salary BETWEEN 50000 AND 79999 THEN 'Medium'
+        ELSE 'Low'
+    END AS salary_category
+FROM employees;
+
+-- Give a 10% bonus to employees in the 'Finance' department:
+SELECT
+    first_name,
+    last_name,
+    department_id,
+    salary,
+    CASE
+        WHEN department_id = (SELECT department_id FROM departments WHERE department_name = 'Finance')
+        THEN salary * 1.10
+        ELSE salary
+    END AS adjusted_salary
+FROM employees;
+```
+
+### Sorting Results
+
+```sql
+-- Sort by salary in descending order
+SELECT * FROM employees ORDER BY salary DESC;
+
+-- Sort by department_id and then by salary in ascending order
+SELECT * FROM employees ORDER BY department_id, salary;
+```
+
+### Limiting Results
+
+```sql
+-- Get the first 5 employees by employee_id
+SELECT * FROM employees ORDER BY employee_id LIMIT 5;
+
+-- Skip the first 10 employees and return the next 5
+SELECT * FROM employees ORDER BY employee_id LIMIT 5 OFFSET 10;
+```
+
+### Subqueries
+
+#### Subqueries in SELECT
+
+```sql
+-- Employees with average department salary
+SELECT first_name, last_name,
+       (SELECT AVG(salary) FROM employees e2 WHERE e2.department_id = e1.department_id) AS avg_salary
+FROM employees e1;
+```
+
+#### Subqueries in WHERE
+
+```sql
+-- Employees earning more than the average salary
+SELECT * FROM employees WHERE salary > (SELECT AVG(salary) FROM employees);
+```
+
+#### Correlated Subqueries
+
+```sql
+-- Employees earning more than the average salary of their department
+SELECT first_name, last_name
+FROM employees e
+WHERE salary > (SELECT AVG(salary) FROM employees WHERE department_id = e.department_id);
+```
+
+#### Scalar Subqueries
+
+```sql
+-- Employees and their department's employee count
+SELECT first_name, last_name,
+       (SELECT COUNT(*) FROM employees e2 WHERE e2.department_id = e1.department_id) AS dept_count
+FROM employees e1;
+```
