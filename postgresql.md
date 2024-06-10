@@ -17,7 +17,7 @@ docker pull postgres
 2. Run the Postgres Docker Container
 
 ```bash
-docker run -e POSTGRES_PASSWORD=pass --name=pg -d -p 5432:5432 postgres
+docker run --name pg -e POSTGRES_PASSWORD=pass -d -v C:\docker_data:/docker_data -p 5432:5432 postgres
 ```
 
 3. Start the psql command-line interface
@@ -67,6 +67,24 @@ CREATE TABLE employees (
 );
 ```
 
+### Table Constraints
+
+Constraints enforce rules for the data in a table. Common constraints include:
+
+1. **PRIMARY KEY:** Uniquely identifies each row in a table.
+2. **FOREIGN KEY:** Ensures referential integrity between tables.
+3. **UNIQUE:** Ensures all values in a column are unique.
+4. **NOT NULL:**Ensures a column cannot have a NULL value.
+5. **CHECK:** Ensures values in a column meet a specific condition.
+6. **Default Constraint:** Assigns a default value to a column if no value is specified when a row is inserted.
+
+### Dropping Constraints
+
+```sql
+ALTER TABLE employees
+DROP CONSTRAINT fk_department;
+```
+
 ### ALTER TABLE
 
 ```sql
@@ -90,24 +108,6 @@ ADD CONSTRAINT unique_name UNIQUE (name);
 DROP TABLE employees;
 ```
 
-### Table Constraints
-
-Constraints enforce rules for the data in a table. Common constraints include:
-
-1. **PRIMARY KEY:** Uniquely identifies each row in a table.
-2. **FOREIGN KEY:** Ensures referential integrity between tables.
-3. **UNIQUE:** Ensures all values in a column are unique.
-4. **NOT NULL:**Ensures a column cannot have a NULL value.
-5. **CHECK:** Ensures values in a column meet a specific condition.
-6. **Default Constraint:** Assigns a default value to a column if no value is specified when a row is inserted.
-
-### Dropping Constraints
-
-```sql
-ALTER TABLE employees
-DROP CONSTRAINT fk_department;
-```
-
 ## INSERT
 
 ```sql
@@ -128,7 +128,7 @@ INSERT INTO employees (
 RETURING first_name, email, department_id; -- RETURNING Clause: Immediately get the values of inserted rows.
 ```
 
-## UPSERT
+### UPSERT
 
 UPSERT, a combination of "INSERT" and "UPDATE".
 
@@ -186,15 +186,15 @@ Key Points
 ```csv
 employees.csv
 
-first_name,last_name,email,salary,department_id,hire_date,additional_info,skills
-John,Doe,john.doe@example.com,60000,1,2024-06-01,"{""hobbies"": [""reading""]}","{SQL,Python}"
-Jane,Smith,jane.smith@example.com,75000,2,2024-06-05,"{""hobbies"": [""music"",""hiking""]}","{Java,JavaScript}"
-Alice,Johnson,alice.johnson@example.com,68000,3,2024-06-06,"{""hobbies"": [""painting""]}","{React,Node.js}"
-Charlie,Brown,charlie.brown@example.com,55000,1,2024-06-01,"{""hobbies"": [""sports""]}","{JavaScript,Angular}"
+first_name,last_name,email,salary,department_id,additional_info,skills
+John,Doe,john.doe@example.com,60000,1,"{""hobbies"": [""reading""]}","{SQL,Python}"
+Jane,Smith,jane.smith@example.com,75000,2,"{""hobbies"": [""music"",""hiking""]}","{Java,JavaScript}"
+Alice,Johnson,alice.johnson@example.com,68000,3,"{""hobbies"": [""painting""]}","{React,Node.js}"
+Charlie,Brown,charlie.brown@example.com,55000,1,"{""hobbies"": [""sports""]}","{JavaScript,Angular}"
 ```
 
 ```sql
-COPY employees (first_name, last_name, email, salary, department_id, hire_date, additional_info, skills)
-FROM '/path/to/employees.csv'
-WITH (FORMAT csv, DELIMITER ',', HEADER);
+COPY employees (first_name, last_name, email, salary, department_id, additional_info, skills)
+from '/docker_data/employees.csv'
+with (format csv, delimiter ',', header);
 ```
