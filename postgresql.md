@@ -206,10 +206,17 @@ with (format csv, delimiter ',', header);
 SELECT * FROM employees WHERE salary > 50000;
 
 -- Employees with a specific hobby
-SELECT * FROM employees WHERE additional_info->>'hobbies' @> '["sports"]';
+SELECT * FROM employees WHERE additional_info->'hobbies' @> '["sports"]';
+
+-- quering employees hobbies
+select additional_info -> 'hobbies' from employees limit 2;
+select additional_info -> 'hobbies' -> 0 from employees limit 2;
+select additional_info -> 'hobbies' ->> 0 from employees limit 2;
 
 -- Employees with JavaScript skill
-SELECT * FROM employees WHERE 'JavaScript' = ANY(skills); -- ANY and ALL are used to compare a value to a set of values: SELECT * FROM students WHERE age >= ALL (ARRAY[18, 20, 22]);
+SELECT first_name, skills  FROM employees WHERE 'JavaScript' = ANY(skills); -- ANY and ALL are used to compare a value to a set of values: SELECT * FROM students WHERE age >= ALL (ARRAY[18, 20, 22]);
+select first_name, skills from employees where skills @> '{"JavaScript"}';
+select first_name, skills from employees where skills @> ARRAY['JavaScript'];
 
 -- Employees with both JavaScript and Angular skills
 SELECT * FROM employees WHERE skills @> ARRAY['JavaScript', 'Angular'];
@@ -227,7 +234,7 @@ SELECT * FROM employees WHERE salary BETWEEN 40000 AND 70000;
 SELECT * FROM employees WHERE salary BETWEEN 40000 AND 70000;
 
 -- Employees with no department assigned
-SELECT * FROM employees WHERE department_id IS NULL; -- Often used with NULL or boolean expressions.
+SELECT * FROM employees WHERE department_id IS NULL; -- IS: Often used with NULL or boolean expressions.
 
 -- Employees with a salary of exactly 65000
 SELECT * FROM employees WHERE salary = 65000; -- Used to compare scalar values.
@@ -248,6 +255,10 @@ SELECT * FROM employees WHERE department_id IN (SELECT department_id FROM depart
 SELECT DISTINCT department_id FROM employees;
 
 ```
+
+1. \->: Extracts a JSON object field or array element.
+2. \->>: Extracts a JSON object field or array element as text
+3. @>: Checks if a JSON object contains another JSON object or if a JSON array contains a specified element.
 
 #### Using CASE with SELECT
 
