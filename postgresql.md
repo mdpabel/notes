@@ -441,3 +441,5 @@ DELETE FROM employees
 WHERE department_id = 2
 RETURNING employee_id, first_name, last_name;
 ```
+
+Hello world!
