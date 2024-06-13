@@ -199,7 +199,7 @@ from '/docker_data/employees.csv'
 with (format csv, delimiter ',', header);
 ```
 
-## SELECTs
+## SELECT
 
 ```sql
 -- Employees with salary greater than 50000
@@ -259,6 +259,7 @@ SELECT DISTINCT department_id FROM employees;
 1. \->: Extracts a JSON object field or array element.
 2. \->>: Extracts a JSON object field or array element as text
 3. @>: Checks if a JSON object contains another JSON object or if a JSON array contains a specified element.
+4. ||: The concatenation operator, used here to append the new element to the existing array.
 
 #### Using CASE with SELECT
 
@@ -343,4 +344,100 @@ WHERE salary > (SELECT AVG(salary) FROM employees WHERE department_id = e.depart
 SELECT first_name, last_name,
        (SELECT COUNT(*) FROM employees e2 WHERE e2.department_id = e1.department_id) AS dept_count
 FROM employees e1;
+```
+
+## Referential Actions
+
+CASCADE is used in two contexts:
+
+1. **ON DELETE CASCADE:** Automatically deletes all child records when a parent record is deleted.
+2. **ON UPDATE CASCADE:** Automatically updates all child records when a parent record is updated.
+
+#### Drop the existing foreign key constraint:
+
+```sql
+ALTER TABLE employees
+DROP CONSTRAINT fk_department;
+```
+
+#### Add the new foreign key constraint with ON DELETE CASCADE and ON UPDATE CASCADE:
+
+```sql
+ALTER TABLE employees
+ADD CONSTRAINT fk_department
+FOREIGN KEY (department_id)
+REFERENCES departments (department_id)
+ON DELETE CASCADE
+ON UPDATE CASCADE;
+```
+
+- If a department is deleted from the departments table, all employees in that department (in the employees table) are automatically deleted as well.
+
+```sql
+DELETE FROM departments WHERE department_id = 1;
+```
+
+- In this case, deleting a department sets the department_id in the employees table to NULL instead of deleting the rows.
+
+```sql
+ALTER TABLE employees
+DROP CONSTRAINT fk_department;
+
+ALTER TABLE employees
+ADD CONSTRAINT fk_department
+FOREIGN KEY (department_id)
+REFERENCES departments (department_id)
+ON DELETE SET NULL;
+```
+
+- If a department's department_id is updated in the departments table, the department_id in all related employees records is automatically updated to match the new department_id.
+
+```sql
+UPDATE departments SET department_id = 2 WHERE department_id = 1;
+```
+
+## UPDATE
+
+```sql
+-- Update the salary of all employees to be 10% higher than the average salary of their department:
+UPDATE employees
+SET salary = salary + (SELECT AVG(salary) * 0.1 FROM employees WHERE employees.department_id = employees.department_id)
+WHERE department_id IS NOT NULL
+RETURNING *;
+```
+
+```sql
+-- Increase salary by 10% for employees in the 'IT' department and by 5% for others:
+UPDATE employees
+SET salary = CASE
+    WHEN department_id = (SELECT department_id FROM departments WHERE department_name = 'IT') THEN salary * 1.10
+    ELSE salary * 1.05
+END;
+```
+
+```sql
+-- add a new hobby "cycling" for Charlie Brown in the employees table
+UPDATE employees
+SET additional_info = jsonb_set(additional_info, '{hobbies}', additional_info->'hobbies' || '"cycling"', true)
+WHERE email = 'charlie.brown@example.com';
+```
+
+1. jsonb_set updates a specific key within the JSONB column
+2. The path '{hobbies}' specifies that we are updating the hobbies array.
+3. The additional_info->'hobbies' || '"cycling"' concatenates the existing hobbies with the new hobby "cycling".
+4. true: A boolean flag indicating whether to create the key if it does not exist.
+
+```sql
+-- add a new skill "Docker" for Alice Johnson in the employees table
+UPDATE employees
+SET skills = array_append(skills, 'Docker')
+WHERE email = 'alice.johnson@example.com';
+```
+
+## DELETE
+
+```sql
+DELETE FROM employees
+WHERE department_id = 2
+RETURNING employee_id, first_name, last_name;
 ```
