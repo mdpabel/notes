@@ -6,6 +6,8 @@ status: published
 priority: 999
 ---
 
+## Table of contents
+
 Think of it as the phone book of the internet. Instead of looking up people's names to find their phone numbers, DNS lets us look up a website name (like google.com) to find its address on the internet, known as an **IP address**.
 
 When you host a website like mdpabel.com on a platform such as Vercel, It uses to store and serve your website's content. Here’s a breakdown of what this typically involves:

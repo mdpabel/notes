@@ -6,6 +6,8 @@ status: published
 priority: 1
 ---
 
+## Table of contents
+
 ## Eexecution contexts
 
 Whenever any JavaScript code is executed, it is executed inside an environment. This environment is known as the

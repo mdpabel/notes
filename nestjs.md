@@ -6,6 +6,8 @@ status: draft
 priority: 1
 ---
 
+## Table of contents
+
 ## Cli
 
 1. Install Nest CLI:

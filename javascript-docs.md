@@ -6,6 +6,8 @@ status: draft
 priority: 1
 ---
 
+## Table of contents
+
 ## JavaScript Data Types:
 
 1. Primitive:

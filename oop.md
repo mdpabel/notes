@@ -6,6 +6,8 @@ status: published
 priority: 1000
 ---
 
+## Table of contents
+
 ## Classes and Objects
 
 A class is a blueprint for creating objects, providing initial values for state (member variables) and implementations of behavior (member functions or methods). An object is an instance of a class. Objects are instantiated from classes using the new keyword. A constructor in Java is a block of code similar to a method that's called when an instance of an object is created. Java allows multiple constructors as long as they have different parameters, this is called constructor Overloading.
