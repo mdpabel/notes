@@ -263,7 +263,7 @@ SELECT DISTINCT department_id FROM employees;
 3. @>: Checks if a JSON object contains another JSON object or if a JSON array contains a specified element.
 4. ||: The concatenation operator, used here to append the new element to the existing array.
 
-#### Using CASE with SELECT
+### Using CASE with SELECT
 
 ```sql
 -- Categorize employees based on their salary:
