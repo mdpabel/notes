@@ -520,3 +520,154 @@ INSERT INTO employee_projects (employee_id, project_id, role) VALUES
 ((SELECT employee_id FROM employees WHERE email = 'alice.smith@example.com'), (SELECT project_id FROM projects WHERE project_name = 'Project Beta'), 'Tester'),
 ((SELECT employee_id FROM employees WHERE email = 'charlie.johnson@example.com'), (SELECT project_id FROM projects WHERE project_name = 'Project Gamma'), 'Manager');
 ```
+
+## JOIN
+
+![join](https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/SQL_Joins.svg/1200px-SQL_Joins.svg.png?20141123194942)
+
+### Inner Join
+
+Combines rows from two tables based on a condition, and returns rows where the condition is true.
+
+```sql
+-- Fetching employees and their corresponding departments.
+SELECT e.first_name, e.last_name, d.department_name
+FROM employees e
+INNER JOIN departments d ON e.department_id = d.department_id;
+```
+
+### Left Join (or Left Outer Join)
+
+Returns all rows from the left table and matched rows from the right table. If no match is found, NULL is returned for columns of the right table.
+
+```sql
+-- Fetching all employees and their departments, including those without a department.
+SELECT e.first_name, e.last_name, d.department_name
+FROM employees e
+LEFT JOIN departments d ON e.department_id = d.department_id;
+```
+
+### Right Join (or Right Outer Join)
+
+Returns all rows from the right table and matched rows from the left table. If no match is found, NULL is returned for columns of the left table.
+
+```sql
+-- Fetching all departments and their employees, including departments without employees.
+SELECT e.first_name, e.last_name, d.department_name
+FROM employees e
+RIGHT JOIN departments d ON e.department_id = d.department_id;
+```
+
+### Full Join (or Full Outer Join)
+
+Returns rows when there is a match in one of the tables. If there is no match, NULLs are returned for non-matching rows from both tables.
+
+### Cross Join
+
+Returns the Cartesian product of the two tables, i.e., each row from the first table is combined with all rows from the second table.
+
+### Self Join
+
+A table is joined with itself. Useful for hierarchical data or when comparing rows within the same table.
+
+### Natural Join
+
+A type of join that automatically joins tables based on columns with the same name. Be cautious as it might not always produce the desired results.
+
+**List all employees, their departments, and the projects they are involved in.**
+
+```sql
+SELECT e.first_name, e.last_name, d.department_name, p.project_name
+FROM employees e
+JOIN departments d ON e.department_id = d.department_id
+JOIN employee_projects ep ON e.employee_id = ep.employee_id
+JOIN projects p ON ep.project_id = p.project_id;
+```
+
+**List all employees and the projects they are working on.**
+
+```sql
+SELECT e.first_name, e.last_name, p.project_name
+FROM employees e
+JOIN employee_projects ep ON e.employee_id = ep.employee_id
+JOIN projects p ON ep.project_id = p.project_id;
+```
+
+## Aggregation
+
+1. COUNT():Counts the number of rows or non-NULL values.
+2. SUM(): Calculates the total sum of a numeric column.
+3. AVG(): Calculates the average value of a numeric column.
+4. MIN(): Finds the minimum value in a column.
+5. MAX(): Finds the maximum value in a column.
+
+- **Count the Number of Employees in Each Department**
+
+```sql
+SELECT d.department_name, COUNT(e.employee_id) AS employee_count
+FROM departments d
+LEFT JOIN employees e ON d.department_id = e.department_id
+GROUP BY d.department_name;
+```
+
+- **Total Salary by Department**
+
+```sql
+SELECT d.department_name, SUM(e.salary) AS total_salary
+FROM departments d
+JOIN employees e ON d.department_id = e.department_id
+GROUP BY d.department_name;
+```
+
+- **Count of Projects by Employee**
+
+```sql
+SELECT e.first_name, e.last_name, COUNT(ep.project_id) AS project_count
+FROM employees e
+LEFT JOIN employee_projects ep ON e.employee_id = ep.employee_id
+GROUP BY e.first_name, e.last_name;
+```
+
+- **Average Number of Projects per Employee**
+
+```sql
+SELECT AVG(project_count) AS average_projects_per_employee
+FROM (
+    SELECT COUNT(ep.project_id) AS project_count
+    FROM employees e
+    LEFT JOIN employee_projects ep ON e.employee_id = ep.employee_id
+    GROUP BY e.employee_id
+) AS project_counts;
+```
+
+- **Departments with More than 2 Employees**
+
+```sql
+SELECT d.department_name, COUNT(e.employee_id) AS employee_count
+FROM departments d
+JOIN employees e ON d.department_id = e.department_id
+GROUP BY d.department_name
+HAVING COUNT(e.employee_id) > 2;
+```
+
+- **Total Salary by Department for Employees with Specific Skills**
+
+```sql
+SELECT d.department_name, SUM(e.salary) AS total_salary
+FROM departments d
+JOIN employees e ON d.department_id = e.department_id
+WHERE 'SQL' = ANY(e.skills)
+GROUP BY d.department_name;
+```
+
+### SQL Query Execution Order
+
+1. FROM Clause
+2. JOIN Clause
+3. ON Clause
+4. WHERE Clause
+5. GROUP BY Clause
+6. HAVING Clause
+7. SELECT Clause
+8. ORDER BY Clause
+9. LIMIT Clause
