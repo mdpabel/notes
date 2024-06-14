@@ -443,3 +443,80 @@ ON DELETE SET NULL;
 ```sql
 UPDATE departments SET department_id = 2 WHERE department_id = 1;
 ```
+
+## Relationships and JOIN
+
+### One to One
+
+Each row in one table is linked to one and only one row in another table. The foreign key in one table (usually the child) also has a unique constraint, ensuring that each value appears only once in this column.
+
+```sql
+CREATE TABLE users (
+    user_id SERIAL PRIMARY KEY,
+    username VARCHAR(50) NOT NULL UNIQUE
+);
+
+CREATE TABLE user_profiles (
+    profile_id SERIAL PRIMARY KEY,
+    user_id INTEGER UNIQUE NOT NULL,
+    address TEXT,
+    phone VARCHAR(15),
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+```
+
+The user_profiles table has a user_id column that references the users table. The UNIQUE constraint on user_id in user_profiles ensures a one-to-one relationship. Each user can have only one profile, and each profile is linked to only one user.
+
+### One to Many
+
+A single row in the parent table can be linked to multiple rows in the child table. The foreign key in the child table does not have a unique constraint, allowing multiple rows to reference the same row in the parent table.
+
+```sql
+CREATE TABLE departments (
+    department_id SERIAL PRIMARY KEY,
+    department_name VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE employees (
+    employee_id SERIAL PRIMARY KEY,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    department_id INTEGER,
+    FOREIGN KEY (department_id) REFERENCES departments(department_id)
+);
+```
+
+### Many to Many
+
+```sql
+CREATE TABLE projects (
+    project_id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    project_name VARCHAR(100) UNIQUE NOT NULL
+);
+```
+
+```sql
+CREATE TABLE employee_projects (
+    employee_id INTEGER,
+    project_id INTEGER,
+    role VARCHAR(100),
+    PRIMARY KEY (employee_id, project_id),
+    FOREIGN KEY (employee_id) REFERENCES employees(employee_id) ON DELETE CASCADE,
+    FOREIGN KEY (project_id) REFERENCES projects(project_id) ON DELETE CASCADE
+);
+```
+
+```sql
+-- Insert into projects
+INSERT INTO projects (project_name) VALUES
+('Project Alpha'),
+('Project Beta'),
+('Project Gamma');
+
+-- Insert into employee_projects
+INSERT INTO employee_projects (employee_id, project_id, role) VALUES
+((SELECT employee_id FROM employees WHERE email = 'alice.smith@example.com'), (SELECT project_id FROM projects WHERE project_name = 'Project Alpha'), 'Developer'),
+((SELECT employee_id FROM employees WHERE email = 'bob.brown@example.com'), (SELECT project_id FROM projects WHERE project_name = 'Project Alpha'), 'Lead Developer'),
+((SELECT employee_id FROM employees WHERE email = 'alice.smith@example.com'), (SELECT project_id FROM projects WHERE project_name = 'Project Beta'), 'Tester'),
+((SELECT employee_id FROM employees WHERE email = 'charlie.johnson@example.com'), (SELECT project_id FROM projects WHERE project_name = 'Project Gamma'), 'Manager');
+```
