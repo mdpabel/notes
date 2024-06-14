@@ -6,6 +6,8 @@ status: published
 priority: 997
 ---
 
+## Table of contents
+
 ## Setup (Docker)
 
 1. Pull the Postgres Docker Image
