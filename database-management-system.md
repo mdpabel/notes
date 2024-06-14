@@ -6,6 +6,8 @@ status: draft
 priority: 1
 ---
 
+## Table of contents
+
 ## ER Diagram:
 
 ER diagrams, or Entity-Relationship diagrams, are visual representations used to design databases. They help us understand how different entities in a system relate to each other.

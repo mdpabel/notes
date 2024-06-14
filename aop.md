@@ -6,6 +6,8 @@ status: published
 priority: 997
 ---
 
+## Table of contents
+
 Aspect-Oriented Programming provides a way for us to inject code into existing functions or objects, without modifying the target logic.
 
 To give you a good example, imagine having written your business logic but now you realize that you have no logging code. The normal approach to this would be to centralize your logging logic inside a new module and the go function by function adding logging information.

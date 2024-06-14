@@ -6,6 +6,8 @@ status: draft
 priority: 1
 ---
 
+## Table of contents
+
 ## Minimum Spanning Tree
 
 1. https://leetcode.com/problems/min-cost-to-connect-all-points/

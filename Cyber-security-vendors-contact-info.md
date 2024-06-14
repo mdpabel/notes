@@ -6,6 +6,8 @@ status: published
 priority: 951
 ---
 
+## Table of contents
+
 Below is the list of search engines or cybersecurity companies we can assist in removing blacklists: To search for vendors or search engines in the blacklist, utilize the Ctrl + F shortcut on Windows, and for Mac or Linux users, use the Command + F shortcut, making it quick and easy to locate specific entries within the list.
 
 | **ENGINE**                     | **Contact**                                                                                                            |

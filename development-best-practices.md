@@ -6,6 +6,8 @@ status: published
 priority: 1
 ---
 
+## Table of contents
+
 ## NodeJS folder structure
 
 ```bash
