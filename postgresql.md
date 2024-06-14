@@ -346,6 +346,52 @@ SELECT first_name, last_name,
 FROM employees e1;
 ```
 
+## UPDATE
+
+```sql
+-- Update the salary of all employees to be 10% higher than the average salary of their department:
+UPDATE employees
+SET salary = salary + (SELECT AVG(salary) * 0.1 FROM employees WHERE employees.department_id = employees.department_id)
+WHERE department_id IS NOT NULL
+RETURNING *;
+```
+
+```sql
+-- Increase salary by 10% for employees in the 'IT' department and by 5% for others:
+UPDATE employees
+SET salary = CASE
+    WHEN department_id = (SELECT department_id FROM departments WHERE department_name = 'IT') THEN salary * 1.10
+    ELSE salary * 1.05
+END;
+```
+
+```sql
+-- add a new hobby "cycling" for Charlie Brown in the employees table
+UPDATE employees
+SET additional_info = jsonb_set(additional_info, '{hobbies}', additional_info->'hobbies' || '"cycling"', true)
+WHERE email = 'charlie.brown@example.com';
+```
+
+1. jsonb_set updates a specific key within the JSONB column
+2. The path '{hobbies}' specifies that we are updating the hobbies array.
+3. The additional_info->'hobbies' || '"cycling"' concatenates the existing hobbies with the new hobby "cycling".
+4. true: A boolean flag indicating whether to create the key if it does not exist.
+
+```sql
+-- add a new skill "Docker" for Alice Johnson in the employees table
+UPDATE employees
+SET skills = array_append(skills, 'Docker')
+WHERE email = 'alice.johnson@example.com';
+```
+
+## DELETE
+
+```sql
+DELETE FROM employees
+WHERE department_id = 2
+RETURNING employee_id, first_name, last_name;
+```
+
 ## Referential Actions
 
 CASCADE is used in two contexts:
@@ -395,51 +441,3 @@ ON DELETE SET NULL;
 ```sql
 UPDATE departments SET department_id = 2 WHERE department_id = 1;
 ```
-
-## UPDATE
-
-```sql
--- Update the salary of all employees to be 10% higher than the average salary of their department:
-UPDATE employees
-SET salary = salary + (SELECT AVG(salary) * 0.1 FROM employees WHERE employees.department_id = employees.department_id)
-WHERE department_id IS NOT NULL
-RETURNING *;
-```
-
-```sql
--- Increase salary by 10% for employees in the 'IT' department and by 5% for others:
-UPDATE employees
-SET salary = CASE
-    WHEN department_id = (SELECT department_id FROM departments WHERE department_name = 'IT') THEN salary * 1.10
-    ELSE salary * 1.05
-END;
-```
-
-```sql
--- add a new hobby "cycling" for Charlie Brown in the employees table
-UPDATE employees
-SET additional_info = jsonb_set(additional_info, '{hobbies}', additional_info->'hobbies' || '"cycling"', true)
-WHERE email = 'charlie.brown@example.com';
-```
-
-1. jsonb_set updates a specific key within the JSONB column
-2. The path '{hobbies}' specifies that we are updating the hobbies array.
-3. The additional_info->'hobbies' || '"cycling"' concatenates the existing hobbies with the new hobby "cycling".
-4. true: A boolean flag indicating whether to create the key if it does not exist.
-
-```sql
--- add a new skill "Docker" for Alice Johnson in the employees table
-UPDATE employees
-SET skills = array_append(skills, 'Docker')
-WHERE email = 'alice.johnson@example.com';
-```
-
-## DELETE
-
-```sql
-DELETE FROM employees
-WHERE department_id = 2
-RETURNING employee_id, first_name, last_name;
-```
-
-Hello world!
