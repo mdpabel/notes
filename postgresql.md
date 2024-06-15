@@ -716,6 +716,11 @@ SELECT * FROM department_salaries_mv;
 REFRESH MATERIALIZED VIEW department_salaries_mv;
 ```
 
+```bash
+EXPLAIN ANALYZE SELECT COUNT(*) FROM department_salaries;
+EXPLAIN ANALYZE SELECT COUNT(*) FROM department_salaries_mv;
+```
+
 **Comparing Materialized Views and Regular Views**
 
 | Aspect             | Materialized View                           | Regular View                                             |
@@ -724,3 +729,152 @@ REFRESH MATERIALIZED VIEW department_salaries_mv;
 | **Performance**    | Faster for complex queries, read-intensive. | Slower for complex queries, as the query runs each time. |
 | **Data Freshness** | Needs manual or scheduled refresh.          | Always current (real-time).                              |
 | **Use Case**       | Frequent reads, less frequent updates.      | Dynamic data where real-time results are necessary.      |
+
+## Function
+
+```sql
+-- get employees by department id
+CREATE OR REPLACE FUNCTION get_employees_by_department(dept_id INTEGER)
+RETURNS TABLE (
+    employee_id INTEGER,
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
+    email VARCHAR(100),
+    salary NUMERIC(10, 2),
+    hire_date DATE,
+    additional_info JSONB,
+    skills TEXT[]
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT employee_id, first_name, last_name, email, salary, hire_date, additional_info, skills
+    FROM employees
+    WHERE department_id = dept_id;
+END;
+$$ LANGUAGE plpgsql;
+```
+
+```sql
+SELECT * FROM get_employees_by_department(2);
+```
+
+```sql
+DROP FUNCTION get_employees_by_department(dept_id INTEGER)
+```
+
+- $$ is called "dollar quotes".
+- This language is called PL/pgSQL. It's a very SQL like language designed to be easy to write functions and procedures. PostgreSQL actually allows itself to be extended and you can use JavaScript, Python, and other languages to write these as well
+
+### Functions triggers
+
+```sql
+CREATE TABLE recycle_bin (
+    recycle_id SERIAL PRIMARY KEY,
+    employee_id INTEGER,
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
+    email VARCHAR(100),
+    salary NUMERIC(10, 2),
+    department_id INTEGER,
+    hire_date DATE,
+    additional_info JSONB,
+    skills TEXT[],
+    deleted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    action TEXT
+);
+```
+
+#### Create the Trigger Function
+
+```sql
+CREATE OR REPLACE FUNCTION log_employee_deletion() RETURNS TRIGGER AS $$
+BEGIN
+    INSERT INTO recycle_bin (
+        employee_id,
+        first_name,
+        last_name,
+        email,
+        salary,
+        department_id,
+        hire_date,
+        additional_info,
+        skills,
+        deleted_at,
+        action
+    )
+    VALUES (
+        OLD.employee_id,
+        OLD.first_name,
+        OLD.last_name,
+        OLD.email,
+        OLD.salary,
+        OLD.department_id,
+        OLD.hire_date,
+        OLD.additional_info,
+        OLD.skills,
+        CURRENT_TIMESTAMP,
+        'DELETE'
+    );
+    RETURN OLD;
+END;
+$$ LANGUAGE plpgsql;
+```
+
+#### Create the Trigger
+
+```sql
+CREATE TRIGGER employee_deletion_audit
+BEFORE DELETE ON employees
+FOR EACH ROW
+EXECUTE FUNCTION log_employee_deletion();
+```
+
+#### Test the Trigger
+
+```sql
+-- Delete an employee record to trigger the recycle bin log
+DELETE FROM employees WHERE employee_id = 1;
+
+-- Check the recycle bin for the deleted record
+SELECT * FROM recycle_bin WHERE employee_id = 1;
+```
+
+1. **Trigger Function:** log_employee_deletion captures the deleted record details and inserts them into the recycle_bin table.
+2. **Trigger:** employee_deletion_audit is triggered before a DELETE operation on the employees table and calls the log_employee_deletion function.
+3. **Recycle Bin Table:** Stores the deleted employee records along with the timestamp and action details.
+
+## Procedures
+
+Procedures in PostgreSQL are similar to functions but are designed for executing a sequence of SQL statements, and unlike functions, they do not return a value.
+
+```sql
+--  increases the salary of all employees in a specified department by a given percentage.
+CREATE OR REPLACE PROCEDURE update_salaries(
+    dept_id INTEGER,
+    percentage NUMERIC
+) LANGUAGE plpgsql AS $$
+BEGIN
+    -- Ensure the department exists
+    IF NOT EXISTS (SELECT 1 FROM departments WHERE department_id = dept_id) THEN
+        RAISE EXCEPTION 'Department ID % does not exist', dept_id;
+    END IF;
+
+    -- Update salaries
+    UPDATE employees
+    SET salary = salary * (1 + percentage / 100)
+    WHERE department_id = dept_id;
+
+    COMMIT;
+EXCEPTION
+    WHEN OTHERS THEN
+        ROLLBACK;
+        RAISE NOTICE 'Salary update failed: %', SQLERRM;
+END;
+$$;
+```
+
+You use CALL instead of SELECT to invoke procedures. Note you can't run procedures as triggers. Triggers always deal with functions. However there's nothing preventing you from CALLing a procedure from a function.
+
+```sql
+CALL update_salaries(2, 10); -- Increase salaries by 10% for department 2
+```
