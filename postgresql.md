@@ -673,3 +673,52 @@ GROUP BY d.department_name;
 7. SELECT Clause
 8. ORDER BY Clause
 9. LIMIT Clause
+
+## Views
+
+views are virtual tables that allow you to save complex queries for later use
+
+```sql
+CREATE VIEW department_salaries AS
+SELECT d.department_name, SUM(e.salary) AS total_salary
+FROM departments d
+JOIN employees e ON d.department_id = e.department_id
+WHERE 'SQL' = ANY(e.skills)
+GROUP BY d.department_name;
+```
+
+```sql
+SELECT * FROM department_salaries;
+```
+
+### Materialized Views
+
+Materialized views store the query results physically on disk. They improve performance by eliminating the need to re-execute complex queries every time data is accessed.
+
+```sql
+CREATE MATERIALIZED VIEW department_salaries_mv AS
+SELECT d.department_name, SUM(e.salary) AS total_salary
+FROM departments d
+JOIN employees e ON d.department_id = e.department_id
+WHERE 'SQL' = ANY(e.skills)
+GROUP BY d.department_name;
+WITH NO DATA;
+-- WITH DATA;
+```
+
+```sql
+SELECT * FROM department_salaries_mv;
+```
+
+```sql
+REFRESH MATERIALIZED VIEW department_salaries_mv;
+```
+
+**Comparing Materialized Views and Regular Views**
+
+| Aspect             | Materialized View                           | Regular View                                             |
+| ------------------ | ------------------------------------------- | -------------------------------------------------------- |
+| **Storage**        | Physically stores query results.            | Stores only the query definition.                        |
+| **Performance**    | Faster for complex queries, read-intensive. | Slower for complex queries, as the query runs each time. |
+| **Data Freshness** | Needs manual or scheduled refresh.          | Always current (real-time).                              |
+| **Use Case**       | Frequent reads, less frequent updates.      | Dynamic data where real-time results are necessary.      |
