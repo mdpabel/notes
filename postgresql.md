@@ -601,6 +601,8 @@ JOIN projects p ON ep.project_id = p.project_id;
 4. MIN(): Finds the minimum value in a column.
 5. MAX(): Finds the maximum value in a column.
 
+**In SQL, any column in the SELECT clause that is not part of an aggregate function must also be included in the GROUP BY clause.**
+
 - **Count the Number of Employees in Each Department**
 
 ```sql
