@@ -195,6 +195,8 @@ Alice,Johnson,alice.johnson@example.com,68000,3,"{""hobbies"": [""painting""]}",
 Charlie,Brown,charlie.brown@example.com,55000,1,"{""hobbies"": [""sports""]}","{JavaScript,Angular}"
 ```
 
+[Download employees.csv](https://mega.nz/file/w6ID0QyB#WWASqQftucuHvtz1EpmEuTQqZyrJiL9_s1ZCqJI71wY)
+
 ```sql
 COPY employees (first_name, last_name, email, salary, department_id, additional_info, skills)
 from '/docker_data/employees.csv'
