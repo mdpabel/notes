@@ -113,10 +113,28 @@ DROP TABLE employees;
 ## INSERT
 
 ```sql
-INSERT INTO departments (department_name) VALUES
-('Finance'),
-('Engineering'),
-('Marketing');
+INSERT INTO departments (department_name)
+VALUES
+    ('Human Resources'),
+    ('Finance'),
+    ('Marketing'),
+    ('Sales'),
+    ('Customer Support'),
+    ('IT'),
+    ('Research and Development'),
+    ('Logistics'),
+    ('Legal'),
+    ('Production'),
+    ('Quality Assurance'),
+    ('Engineering'),
+    ('Administration'),
+    ('Training'),
+    ('Procurement'),
+    ('Business Development'),
+    ('Public Relations'),
+    ('Corporate Strategy'),
+    ('Operations'),
+    ('Product Management');
 ```
 
 ```sql
@@ -258,6 +276,8 @@ SELECT * FROM employees WHERE department_id IN (SELECT department_id FROM depart
 -- DISTINCT Departments
 SELECT DISTINCT department_id FROM employees;
 
+-- COALESCE is to return the first non-null value from a list of expressions.
+SELECT COALESCE(salary, 0) from employees LIMIT 1;
 ```
 
 1. \->: Extracts a JSON object field or array element.
@@ -593,6 +613,34 @@ SELECT e.first_name, e.last_name, p.project_name
 FROM employees e
 JOIN employee_projects ep ON e.employee_id = ep.employee_id
 JOIN projects p ON ep.project_id = p.project_id;
+```
+
+## CTE
+
+A Common Table Expression (CTE) is a temporary result set that you can reference within a SELECT, INSERT, UPDATE, or DELETE statement.
+
+```sql
+-- retrieve all employees along with their department names.
+WITH EmployeeDepartments AS (
+    SELECT e.employee_id, e.first_name, e.last_name, d.department_name
+    FROM employees e
+    JOIN departments d ON e.department_id = d.department_id
+)
+SELECT *
+FROM EmployeeDepartments;
+```
+
+```sql
+-- calculate the average salary for each department and then retrieve departments where the average salary is above a certain threshold.
+WITH DepartmentSalaries AS (
+    SELECT department_id, AVG(salary) AS avg_salary
+    FROM employees
+    GROUP BY department_id
+)
+SELECT d.department_name, ds.avg_salary
+FROM DepartmentSalaries ds
+JOIN departments d ON ds.department_id = d.department_id
+WHERE ds.avg_salary > 60000;
 ```
 
 ## Aggregation
@@ -961,7 +1009,7 @@ FROM
     employees;
 ```
 
-## Frame Specification
+### Frame Specification
 
 ```sql
 -- Calculate the moving average of salaries over the last three rows in the department.
@@ -979,4 +1027,223 @@ SELECT
     ) AS moving_avg_salary
 FROM
     employees;
+```
+
+## Transactions
+
+### ACID Properties:
+
+1. **Atomicity:** Transactions should be like a single, unbreakable action. Everything inside a transaction should succeed or fail together, so we don't end up with partial changes that mess things up.
+
+2. **Consistency:** Transactions keep the database in a good, consistent state. For example, if we add an order, we also need to add the items for that order to keep things sensible.
+
+3. **Isolation:** Transactions should happen in their own little world, so they don't mess each other up. Each transaction should wait its turn to make changes and not interfere with others.
+
+4. **Durability:** Once a transaction is done, its changes should stick around even if something bad happens like a power outage or a system crash.
+
+```sql
+-- Transferring an Employee to a Different Department
+BEGIN;
+
+-- Transfer employee to a different department
+UPDATE employees
+SET department_id = 2
+WHERE employee_id = 1;
+
+-- Update the salary
+UPDATE employees
+SET salary = salary + 5000
+WHERE employee_id = 1;
+
+-- Verify changes (optionally)
+SELECT * FROM employees WHERE employee_id = 1;
+
+-- Commit the transaction
+COMMIT;
+```
+
+**Rollback if there's an issue:**
+
+```sql
+BEGIN;
+
+-- Attempt to transfer employee and update salary
+UPDATE employees
+SET department_id = 2
+WHERE employee_id = 1;
+
+UPDATE employees
+SET salary = salary + 5000
+WHERE employee_id = 1;
+
+-- If an error occurs, rollback
+ROLLBACK;
+```
+
+[Database Transactions and Concurrency](https://www.mdpabel.com/notes/Database-Transactions-and-Concurrency)
+
+## Indexing
+
+### EXPLAIN Cost
+
+- Ref: [https://scalegrid.io/blog/postgres-explain-cost/](https://scalegrid.io/blog/postgres-explain-cost/)
+
+The costs are in an arbitrary unit. A common misunderstanding is that they are in milliseconds or some other unit of time, but that’s not the case.
+
+#### Startup Costs
+
+The first numbers you see after cost= are known as the “startup cost”. This is an estimate of how long it will take to fetch the first row. For a sequential scan, the startup cost will generally be close to zero, as it can start fetching rows straight away. For a sort operation, it will be higher because a large proportion of the work needs to be done before rows can start being returned.
+
+```bash
+EXPLAIN SELECT * FROM users ORDER BY username;
+
+QUERY PLAN                                                    |
+--------------------------------------------------------------+
+Sort  (cost=66.83..69.33 rows=1000 width=17)                  |
+  Sort Key: username                                          |
+  ->  Seq Scan on users  (cost=0.00..17.00 rows=1000 width=17)|
+```
+
+In the above query plan, as expected, the estimated statement execution cost for the Seq Scan is 0.00, and for the Sort is 66.83.
+
+#### Total Costs
+
+The second cost statistic, after the startup cost and the two dots, is known as the “total cost”. This is an estimate of how long it will take to return all the rows.
+
+We can see that the total cost of the Seq Scan operation is 17.00. For the Sort operation is 69.33, which is not much more than its startup cost (as expected).
+
+#### EXPLAIN ANALYZE
+
+```bash
+QUERY PLAN                                                                                                 |
+-----------------------------------------------------------------------------------------------------------+
+Sort  (cost=66.83..69.33 rows=1000 width=17) (actual time=20.569..20.684 rows=1000 loops=1)                |
+  Sort Key: username                                                                                       |
+  Sort Method: quicksort  Memory: 102kB                                                                    |
+  ->  Seq Scan on users  (cost=0.00..17.00 rows=1000 width=17) (actual time=0.048..0.596 rows=1000 loops=1)|
+Planning Time: 0.171 ms                                                                                    |
+Execution Time: 20.793 ms
+```
+
+We can see that the total execution cost is still 69.33, with the majority of that being the Sort operation, and 17.00 coming from the Sequential Scan. Note that the query execution time is just under 21ms.
+
+### Types of Indexes
+
+1. **Primary Index**: Created automatically on the primary key column. Ensures unique and non-null values.
+2. **Unique Index**: Ensures that all values in the indexed column(s) are unique.
+
+```sql
+explain select first_name, email from employees where first_name='David' and last_name='Parker' and department_id = 3;
+                                                       QUERY PLAN
+-------------------------------------------------------------------------------------------------------------------------
+ Gather  (cost=1000.00..8789.40 rows=1 width=34)
+   Workers Planned: 2
+   ->  Parallel Seq Scan on employees  (cost=0.00..7789.30 rows=1 width=34)
+         Filter: (((first_name)::text = 'David'::text) AND ((last_name)::text = 'Parker'::text) AND (department_id = 3))
+(4 rows)
+```
+
+```sql
+explain select first_name, email from employees where email='david.parker@daniels.net';
+                                      QUERY PLAN
+--------------------------------------------------------------------------------------
+ Index Scan using employees_email_key on employees  (cost=0.42..8.44 rows=1 width=34)
+   Index Cond: ((email)::text = 'david.parker@daniels.net'::text)
+(2 rows)
+```
+
+### Creating Index
+
+```sql
+CREATE INDEX idx_last_first_name ON employees(last_name, first_name);
+```
+
+| Index Type        | When to Use                                | Advantages                                                         | Disadvantages                                       |
+| ----------------- | ------------------------------------------ | ------------------------------------------------------------------ | --------------------------------------------------- |
+| **B-tree**        | Equality and range queries, ordering       | General-purpose, efficient                                         | Maintenance overhead                                |
+| **Hash**          | Exact match queries                        | Fast exact match lookups, space-efficient                          | Not suitable for range queries                      |
+| **Bitmap**        | Low cardinality columns, complex queries   | Space-efficient for low cardinality, efficient for complex queries | Not suitable for high cardinality, maintenance cost |
+| **GiST**          | Non-standard data types, custom queries    | Flexible, handles complex data types                               | Complexity                                          |
+| **GIN**           | Full-text search, composite types          | Efficient for full-text and array queries                          | Large index size, maintenance                       |
+| **SP-GiST**       | Spatial, multidimensional queries          | Efficient for spatial data                                         | Complexity                                          |
+| **Full-Text**     | Text search in large documents             | Improves text search performance                                   | Large storage space, setup complexity               |
+| **Clustered**     | Primary keys, range queries, sorting       | Fast access based on ordering key                                  | Only one per table, costly reordering               |
+| **Non-Clustered** | Secondary keys, frequently queried columns | Flexible, multiple indexes per table                               | Additional storage, pointer lookups                 |
+
+```sql
+ALTER TABLE employees
+ADD COLUMN about TEXT;
+```
+
+```sql
+INSERT INTO employees (first_name, last_name, email, salary, department_id, about)
+VALUES
+('John', 'Doe', 'john.doe@example.com', 75000, 1, 'A senior software engineer with expertise in backend development.'),
+('Jane', 'Smith', 'jane.smith@example.com', 68000, 2, 'A marketing specialist with a focus on digital campaigns.'),
+('Alice', 'Johnson', 'alice.johnson@example.com', 82000, 3, 'An experienced project manager leading multiple IT projects.'),
+('Bob', 'Williams', 'bob.williams@example.com', 62000, 4, 'A sales representative with a track record of exceeding targets.');
+```
+
+### GIN and Full Text Search
+
+GIN is good for things where you can have one column that have multiple values that can return true. So what if we took our search term (in this case let's search for senior software engineer) and broke it down in smaller, searchable pieces? Like, three letter pieces, or as they're called, trigrams. This is one way PostgreSQL can handle full text search.
+
+```bash
+CREATE EXTENSION pg_trgm;
+```
+
+```sql
+SELECT SHOW_TRGM('star wars');
+```
+
+```bash
+                       show_trgm
+-------------------------------------------------------
+ {"  s","  w"," st"," wa","ar ",ars,"rs ",sta,tar,war}
+```
+
+```sql
+EXPLAIN SELECT first_name, about from employees where about ILIKE '%senior software engineer%';
+```
+
+```bash
+                                 QUERY PLAN
+----------------------------------------------------------------------------
+ Gather  (cost=1000.00..8364.64 rows=20 width=39)
+   Workers Planned: 2
+   ->  Parallel Seq Scan on employees  (cost=0.00..7362.64 rows=8 width=39)
+         Filter: (about ~~* '%senior software engineer%'::text)
+(4 rows)
+```
+
+CREATING INDEX
+
+```sql
+CREATE INDEX ON employees USING GIN(about gin_trgm_ops);
+```
+
+```sql
+EXPLAIN SELECT first_name, about from employees where about ILIKE '%senior software engineer%';
+```
+
+```bash
+                                     QUERY PLAN
+-------------------------------------------------------------------------------------
+ Bitmap Heap Scan on employees  (cost=113.79..190.66 rows=20 width=39)
+   Recheck Cond: (about ~~* '%senior software engineer%'::text)
+   ->  Bitmap Index Scan on employees_about_idx  (cost=0.00..113.79 rows=20 width=0)
+         Index Cond: (about ~~* '%senior software engineer%'::text)
+(4 rows)
+```
+
+### Partial indexes
+
+```sql
+explain SELECT COUNT(*) FROM employees where department_id = 2; -- cost=8384.23..8384.24 rows=1 width=8
+```
+
+Creating Index
+
+```sql
+CREATE INDEX idx_dept_names ON employees (department_id) WHERE department_id = 2; -- cost=700.19..700.20 rows=1 width=8
 ```
