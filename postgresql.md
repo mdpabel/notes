@@ -878,3 +878,105 @@ You use CALL instead of SELECT to invoke procedures. Note you can't run procedur
 ```sql
 CALL update_salaries(2, 10); -- Increase salaries by 10% for department 2
 ```
+
+## Window Functions
+
+1. **ROW_NUMBER():** Assigns a unique number to each row.
+
+```sql
+-- Assign a unique row number to each employee in each department.
+SELECT
+    employee_id,
+    first_name,
+    last_name,
+    salary,
+    department_id,
+    ROW_NUMBER() OVER (PARTITION BY department_id ORDER BY salary DESC) AS row_num
+FROM
+    employees;
+```
+
+2. **RANK():** Assigns a rank to each row within the partition of a result set.
+
+```sql
+-- Rank employees based on their salary within their department.
+SELECT
+    employee_id,
+    first_name,
+    last_name,
+    salary,
+    department_id,
+    RANK() OVER (PARTITION BY department_id ORDER BY salary DESC) AS salary_rank
+FROM
+    employees;
+```
+
+3. **DENSE_RANK():** Similar to RANK(), but without gaps in ranking.
+4. **SUM():** Calculates the sum of values.
+
+```sql
+-- Calculate the running total of salaries within each department.
+SELECT
+    employee_id,
+    first_name,
+    last_name,
+    salary,
+    department_id,
+    SUM(salary) OVER (PARTITION BY department_id ORDER BY hire_date) AS running_total
+FROM
+    employees;
+```
+
+5. **AVG():** Calculates the average of values.
+6. **MAX():** Finds the maximum value.
+7. **MIN():** Finds the minimum value.
+8. **LAG():** Accesses data from a previous row.
+
+```sql
+-- Get the salary of the previous employee within the same department.
+SELECT
+    employee_id,
+    first_name,
+    last_name,
+    salary,
+    department_id,
+    LAG(salary) OVER (PARTITION BY department_id ORDER BY hire_date) AS previous_salary
+FROM
+    employees;
+```
+
+9. **LEAD():** Accesses data from a subsequent row
+
+```sql
+-- Get the salary of the next employee within the same department.
+
+SELECT
+    employee_id,
+    first_name,
+    last_name,
+    salary,
+    department_id,
+    LEAD(salary) OVER (PARTITION BY department_id ORDER BY hire_date) AS next_salary
+FROM
+    employees;
+```
+
+## Frame Specification
+
+```sql
+-- Calculate the moving average of salaries over the last three rows in the department.
+
+SELECT
+    employee_id,
+    first_name,
+    last_name,
+    salary,
+    department_id,
+    AVG(salary) OVER (
+        PARTITION BY department_id
+        ORDER BY hire_date
+        ROWS BETWEEN 2 PRECEDING AND CURRENT ROW
+    ) AS moving_avg_salary
+FROM
+    employees;
+```
