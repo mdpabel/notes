@@ -1,9 +1,9 @@
 ---
 title: Postgresql
-description: Postgresql
+description: CRUD, Relationship, JOIN, Aggregation, Materialized Views, Function, Trigger, Procedure, Indexing...
 date: 07-06-2024
 status: published
-priority: 997
+priority: 1000
 ---
 
 ## Table of contents
@@ -446,7 +446,7 @@ ON DELETE SET NULL;
 UPDATE departments SET department_id = 2 WHERE department_id = 1;
 ```
 
-## Relationships and JOIN
+## Relationships
 
 ### One to One
 
