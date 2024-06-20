@@ -6,11 +6,8 @@ status: published
 priority: 1000
 ---
 
-<div class='md-toc'>
 ## Table of contents
-</div>
 
-<div class='md-content'>
 ## Setup (Docker)
 
 1. Pull the Postgres Docker Image
@@ -1250,5 +1247,3 @@ Creating Index
 ```sql
 CREATE INDEX idx_dept_names ON employees (department_id) WHERE department_id = 2; -- cost=700.19..700.20 rows=1 width=8
 ```
-
-</div>
