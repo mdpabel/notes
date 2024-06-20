@@ -6,8 +6,11 @@ status: published
 priority: 1000
 ---
 
+<div class='md-toc'>
 ## Table of contents
+</div>
 
+<div class='md-content'>
 ## Setup (Docker)
 
 1. Pull the Postgres Docker Image
@@ -374,8 +377,8 @@ FROM employees e1;
 
 ```sql
 -- Update the salary of all employees to be 10% higher than the average salary of their department:
-UPDATE employees
-SET salary = salary + (SELECT AVG(salary) * 0.1 FROM employees WHERE employees.department_id = employees.department_id)
+UPDATE employees e1
+SET salary = salary + (SELECT AVG(salary) * 0.1 FROM employees e2 WHERE e1.employees.department_id = e2.employees.department_id)
 WHERE department_id IS NOT NULL
 RETURNING *;
 ```
@@ -1247,3 +1250,5 @@ Creating Index
 ```sql
 CREATE INDEX idx_dept_names ON employees (department_id) WHERE department_id = 2; -- cost=700.19..700.20 rows=1 width=8
 ```
+
+</div>
