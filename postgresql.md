@@ -1258,7 +1258,7 @@ CREATE INDEX idx_dept_names ON employees (department_id) WHERE department_id = 2
 - Example: Student and Course entities. A student enrolls in a course.
 - Used For: Talking with business people to understand what data is needed.
 
-![Conceptual Model](./images/db/conceptual%20model.png)
+![Conceptual Model](https://raw.githubusercontent.com/mdpabel/notes/main/images/db/conceptual%20model.png)
 
 2. **Logical Model**:
 
@@ -1266,14 +1266,14 @@ CREATE INDEX idx_dept_names ON employees (department_id) WHERE department_id = 2
 - Example: Student table with attributes like first_name, email. Enrollment date should be part of the Enrollment table, linking Student and Course.
 - Used For: Planning how to store data without worrying about the specific database.
 
-![Logical Model](./images/db/logical%20model.png)
+![Logical Model](https://raw.githubusercontent.com/mdpabel/notes/main/images/db/logical%20model.png)
 
 3. **Physical Model**:
 
 - Purpose: Converts the logical model into tables with keys and data types for a specific database.
 - Example: students, courses, and enrollments tables with actual data types and keys.
 
-![Physical Model](./images/db/physical%20model.png)
+![Physical Model](https://raw.githubusercontent.com/mdpabel/notes/main/images/db/physical%20model.png)
 
 ### Database Keys and Constraints
 
@@ -1285,10 +1285,10 @@ CREATE INDEX idx_dept_names ON employees (department_id) WHERE department_id = 2
 
 1. **First Normal Form (1NF)**: Each cell should have a single value; no repeating groups. Example: students table with single-value fields.
 
-![1NF](./images/db/1NF.png)
+![1NF](https://raw.githubusercontent.com/mdpabel/notes/main/images/db/1NF.png)
 
 2. **Second Normal Form (2NF)**: The table should describe one entity, and each column should relate to that entity; no partial dependency. Example: enrollments table attributes like date and price depend on both student_id and course_id.
 
-![2NF](./images/db/2NF.png)
+![2NF](https://raw.githubusercontent.com/mdpabel/notes/main/images/db/2NF.png)
 
 3. **Third Normal Form (3NF)**: No column should depend on another non-key column. Example: Avoid storing derived or calculated data in a table.
