@@ -60,6 +60,7 @@ Below is the list of search engines or cybersecurity companies we can assist in 
 | Cylance                        | cylancefilesubmit@cylance.com                                                                                          |
 | Cynet                          | soc@cynet.com                                                                                                          |
 | CyRadar                        | virustotal@cyradar.com                                                                                                 |
+| CyRadar                        | https://m.me/CyRadarInc                                                                                                |
 | Deep Instinct                  | vt-fps-requests@deepinstinct.com                                                                                       |
 | DNS8                           | dns8@layer8.pt                                                                                                         |
 | DrWeb                          | vms@drweb.com                                                                                                          |
