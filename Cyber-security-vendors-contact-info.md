@@ -128,6 +128,7 @@ Below is the list of search engines or cybersecurity companies we can assist in 
 | SecureAge                      | [SecureAge Submit](https://www.secureaplus.com/features/antivirus/report-false-positive/)                              |
 | SecureAge                      | [SecureAge Contact](https://www.secureaplus.com/features/antivirus/report-false-positive/)                             |
 | Seclookup                      | info@seclookup.com                                                                                                     |
+| Seclookup                      | [seclookup](https://seclookup.freshdesk.com/support/tickets/new)                                                       |
 | Segasec                        | support@segasec.com                                                                                                    |
 | Sentinel One                   | report@sentinelone.com                                                                                                 |
 | SOCRadar                       | murat.ozfidan@socradar.io                                                                                              |
