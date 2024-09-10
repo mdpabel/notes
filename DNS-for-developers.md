@@ -116,23 +116,95 @@ To the user, it looks like they are accessing www.nextgenwordpress.com, but the 
 www.example.com.    IN    CNAME    example.com.
 ```
 
-### AAAA Record (IPv6 Address Record):
+## DNS Record Terms
 
-### MX Record (Mail Exchanger Record):
+### @ in DNS Records:
 
-Directs email to the appropriate mail server for a domain.
+In DNS records, the symbol @ is a placeholder that refers to the root domain (e.g., example.com). Instead of typing the full domain name in each record, @ is used as a shorthand for the base domain. For example, if your domain is 3zerodigital.com, an SPF record for @ applies to the entire domain, meaning any emails sent from anything@3zerodigital.com will be validated against the SPF record.
+
+## Priority in MX Records
+
+The priority in MX (Mail Exchanger) records determines which mail server should be used first when handling incoming mail. A lower number means higher priority. If you have multiple mail servers, the server with the lowest priority number will be used first.
+
+For instance:
+
+- MX Record: secure245.inmotionhosting.com
+- Priority: 10
+
+In this case, the mail server secure245.inmotionhosting.com has a priority of 10, meaning it will be tried first for handling incoming mail. If you had another server with priority 20, it would act as a fallback.
+
+## Email
+
+### SPF:
+
+SPF prevents spammers from sending emails on behalf of your domain. The value for SPF will often include the IP addresses or mail servers that are authorized to send email on behalf of your domain.
+
+### DKIM:
+
+DKIM allows the recipient’s email server to verify that the email wasn’t tampered with during transmission. This is a long cryptographic string provided by your email server for email authentication.
+
+### CNAME:
+
+CNAME records are used to map one domain name to another, commonly for mail subdomains like mail.example.com.
+
+### MX
+
+MX records are responsible for directing incoming email to your domain’s email server. This points to the email server that will handle incoming emails for your domain, such as mail.secure245.inmotionhosting.com.
+
+### MX Record
+
+The MX record directs incoming mail to the appropriate mail server. Here’s how to set it up:
 
 ```bash
-example.com.    IN    MX    10 mailserver1.example.com.
-example.com.    IN    MX    20 mailserver2.example.com.
+Host: @
+Type: MX
+Value: secure245.inmotionhosting.com
+Priority: 10
 ```
 
-![MX Record](images/DNS_MX.png)
+This record tells the DNS to route incoming emails for 3zerodigital.com to the server secure245.inmotionhosting.com.
 
-### TXT Record (Text Record):
+### CNAME Record
 
-### NS Record (Name Server Record):
+A CNAME record allows you to map one domain name to another. In the context of email, it is commonly used to point subdomains like mail.example.com to the correct mail server.
 
+```bash
+Host: mail
+Type: CNAME
+Value: secure245.inmotionhosting.com
 ```
 
+This CNAME record ensures that when someone tries to access mail.3zerodigital.com, they are directed to secure245.inmotionhosting.com, your email server.
+
+### DKIM Record
+
+DKIM allows you to attach a cryptographic signature to your emails, which the receiving server can use to verify the email’s authenticity. Here's an example:
+
+```bash
+Host: default._domainkey
+Type: TXT
+Value: (A long DKIM string provided by your email server)
+```
+
+This ensures that emails sent from your domain are signed with a DKIM key, preventing tampering during transmission.
+
+### SPF Record
+
+An SPF record defines which mail servers are authorized to send emails for your domain. Here’s how to set one up:
+
+```bash
+Host: @
+Type: TXT
+value: v=spf1 +ip4:198.46.81.29 +include:smtp.servconfig.com +include:secure245.inmotionhosting.com ~all
+```
+
+The value in this SPF record authorizes the IP address 198.46.81.29 and the mail servers at smtp.servconfig.com and secure245.inmotionhosting.com to send emails on behalf of your domain.
+
+**The easiest way to find the correct SPF, DKIM records is through the Email Deliverability tool in cPanel.**
+
+**and to find the correct Go to Email Accounts and select Connect Devices or Set Up Mail Client to view mail server details.**
+
+```bash
+Incoming Mail Server: secure245.inmotionhosting.com
+Outgoing Mail Server: secure245.inmotionhosting.com
 ```
