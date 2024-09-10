@@ -225,3 +225,13 @@ The value in this SPF record authorizes the IP address 198.46.81.29 and the mail
 Incoming Mail Server: secure245.inmotionhosting.com
 Outgoing Mail Server: secure245.inmotionhosting.com
 ```
+
+## Sub domain
+
+```bash
+A Record
+
+Host: blog
+value: 216.194.170.68
+priority: Automatic
+```
