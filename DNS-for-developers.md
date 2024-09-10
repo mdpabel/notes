@@ -82,6 +82,23 @@ So, when someone types in your domain name (e.g., www.yourdomain.com), their bro
 Authoritative DNS servers are the servers that store DNS records for domain names. But applications like browsers don't query authoritative DNS directly. There are quite a few paths DNS queries can travels before
 they return the requested DNS records.
 
+## DNS Propagation:
+
+- to check DNS resolution
+
+```bash
+C:\Users\mdpabel>nslookup 3zerodigital.com
+Server:  UnKnown
+Address:  192.168.64.176
+
+Non-authoritative answer:
+Name:    3zerodigital.com
+Addresses:  64:ff9b::4c4c:1515
+          76.76.21.21
+```
+
+- online tool: [https://dnschecker.org/](https://dnschecker.org/)
+
 ## Common DNS Record Types
 
 ### A Record (Address Record):
@@ -122,7 +139,7 @@ www.example.com.    IN    CNAME    example.com.
 
 In DNS records, the symbol @ is a placeholder that refers to the root domain (e.g., example.com). Instead of typing the full domain name in each record, @ is used as a shorthand for the base domain. For example, if your domain is 3zerodigital.com, an SPF record for @ applies to the entire domain, meaning any emails sent from anything@3zerodigital.com will be validated against the SPF record.
 
-## Priority in MX Records
+### Priority in MX Records
 
 The priority in MX (Mail Exchanger) records determines which mail server should be used first when handling incoming mail. A lower number means higher priority. If you have multiple mail servers, the server with the lowest priority number will be used first.
 
