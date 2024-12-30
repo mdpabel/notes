@@ -48,7 +48,7 @@ Below is the list of search engines or cybersecurity companies we can assist in 
 | ClamAV                         | [ClamAV Submit](http://www.clamav.net/reports/fp)                                                                      |
 | Clean-MX                       | abuse@clean-mx.de                                                                                                      |
 | Cluster25                      | threatintel@cluster25.io                                                                                               |
-| Cluster25                      | [Cluster25 Delisting](https://get.duskrise.com/delisting)                                                              |
+| Cluster25                      | [Cluster25 Delisting](https://www.duskrise.com/delisting/)                                                             |
 | CMC                            | PSIRT@cmccybersecurity.com                                                                                             |
 | CRDF                           | [CRDF False Positive](https://threatcenter.crdf.fr/false_positive.html)                                                |
 | Criminal IP (AI Spera)         | support@aispera.com                                                                                                    |
