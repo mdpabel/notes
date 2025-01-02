@@ -3,7 +3,7 @@ title: Linux Commands and Practice Tasks
 description: Comprehensive Linux commands, categorized with practice tasks for mastering Linux.
 date: 03-24-2024
 status: published
-priority: 998
+priority: 999
 ---
 
 # Linux Commands
@@ -55,28 +55,27 @@ priority: 998
 
 ---
 
-## **3. Text Editing and Viewing**
+## **3. Searching and Filtering**
 
-- **Nano**:
+- **Find Files**:
 
-  - `ctrl+o` – Save a file.
-  - `ctrl+x` – Exit Nano.
+  - `find . -name "*.txt"` – Find all .txt files in the current directory.
+  - `find /path -type f -name "*.log"` – Search for log files in a directory.
+  - `find . -type f -exec chmod 644 {} \;` – Change permissions of all files.
+  - `find . -mtime -7` – Find files modified in the last 7 days.
+  - `find . -size +1M` – Find files larger than 1MB.
+  - `find . -empty` – Find empty files and directories.
 
-- **Vim**:
+- **Grep**:
 
-  - `i` – Insert mode.
-  - `:q` – Quit.
-  - `:q!` – Quit without saving.
-  - `:w` – Save.
-  - `:d` – Delete line(s).
+  - `grep "error" file.txt` – Search for a pattern in a file.
+  - `grep -r "error" /var/log` – Search recursively in directories.
+  - `grep -i "error" file.txt` – Case-insensitive search.
+  - `grep -v "pattern" file.txt` – Exclude lines with a specific pattern.
 
-- **Reading Files**:
-  - `cat` – Display file contents.
-  - `less` – View file contents one page at a time.
-  - `/` – Search within `less`.
-  - `head` – Show the first few lines of a file.
-  - `tail` – Show the last few lines of a file.
-  - `tail -f` – Monitor a file in real-time.
+- **Locate**:
+  - `locate file-name` – Find a file by name.
+  - `updatedb` – Update the file database for locate.
 
 ---
 
@@ -84,8 +83,11 @@ priority: 998
 
 - `chmod u=rw,g=rw,o=rw file.txt` – Set specific permissions.
 - `chmod 777 file.txt` – Give full permissions.
-- `chown user:group file.txt` – Change file ownership.
 - `chmod +x file.sh` – Make a file executable.
+- `chown user:group file.txt` – Change file ownership.
+- `chown -R user:group folder` – Change ownership recursively.
+- `chmod -R 755 folder` – Apply permissions recursively.
+- `stat file.txt` – Display detailed file permissions and metadata.
 
 ---
 
@@ -105,6 +107,8 @@ priority: 998
   - `jobs` – View background jobs.
   - `bg 1` – Resume a job in the background.
   - `fg 1` – Resume a job in the foreground.
+  - `nice -n 10 process` – Start a process with a lower priority.
+  - `renice -n 5 -p PID` – Change priority of a running process.
 
 ---
 
@@ -120,6 +124,7 @@ priority: 998
 - **Pipes**:
 
   - `ps aux | grep "process-name"` – Combine commands.
+  - `cat file.txt | sort | uniq` – Sort and remove duplicates.
 
 - **Shortcuts**:
   - `!!` – Repeat the last command.
@@ -127,6 +132,8 @@ priority: 998
   - `ctrl+r` – Search command history.
   - `ctrl+a` – Go to the start of the line.
   - `ctrl+e` – Go to the end of the line.
+  - `ctrl+w` – Delete the previous word.
+  - `ctrl+u` – Clear the current line.
 
 ---
 
@@ -165,16 +172,26 @@ priority: 998
 - **Testing Connections**:
   - `curl http://localhost:8000/` – Test HTTP requests.
   - `wget http://example.com/file` – Download a file.
+  - `ping example.com` – Test network connectivity.
+  - `traceroute example.com` – Trace the route to a host.
+  - `netstat -tuln` – View network connections.
+  - `nmap -sP 192.168.1.0/24` – Scan a network for devices.
 
 ---
 
 ## **9. Package Management**
 
 - **APT (Ubuntu/Debian)**:
+
   - `apt update` – Update package lists.
   - `apt upgrade` – Upgrade installed packages.
   - `apt install package` – Install a package.
   - `apt autoremove` – Remove unused packages.
+
+- **YUM (CentOS/RedHat)**:
+  - `yum update` – Update packages.
+  - `yum install package` – Install a package.
+  - `yum remove package` – Remove a package.
 
 ---
 
@@ -184,327 +201,117 @@ priority: 998
 
   - `df -h` – Show disk space usage.
   - `du -sh folder` – Show folder size.
+  - `du -ah` – Show all files and directories with sizes.
 
 - **System Monitoring**:
 
   - `htop` – Interactive process viewer.
   - `top` – Real-time system stats.
+  - `vmstat` – Show system performance metrics.
+  - `iotop` – Monitor disk I/O.
 
 - **Logs**:
+
   - `tail -f /var/log/syslog` – Monitor logs in real-time.
   - `grep "error" /var/log/syslog` – Search for errors in logs.
 
+- **Advanced File Operations**:
+
+  - `rsync -av source/ destination/` – Sync files and directories.
+  - `scp file.txt user@host:/path` – Securely copy files to a remote server.
+  - `dd if=/dev/sda of=/dev/sdb bs=64K conv=noerror,sync` – Clone a disk.
+
+- **Disk and Partition Management**:
+
+  - `fdisk -l` – List all disks and partitions.
+  - `mount /dev/sdX /mnt` – Mount a disk.
+  - `umount /mnt` – Unmount a disk.
+  - `lsblk` – List information about block devices.
+  - `blkid` – Get UUID and filesystem information for devices.
+
+- **Debugging and Testing**:
+  - `strace program` – Trace system calls.
+  - `lsof -i :80` – List processes using port 80.
+  - `dmesg` – View kernel messages.
+
 ---
 
-## **11. Debugging and Testing**
-
-- `strace` – Trace system calls of a program.
-- `lsof` – List open files.
-- `dmesg` – View kernel messages.
-
----
-
-## **12. Automation and Scheduling**
+## **11. Automation and Scheduling**
 
 - **Cron Jobs**:
+
   - `crontab -e` – Edit cron jobs for a user.
   - `@reboot` – Run a task at system startup.
   - `0 2 * * *` – Schedule a task (e.g., daily at 2 AM).
 
----
-
-# Linux Commands Practice
-
-## **1. Navigation and Basic Commands**
-
-### **Task 1: Navigate and Explore**
-
-1. Print the current working directory and navigate to the root directory, then back:
-
-   ```bash
-   pwd
-   cd /
-   cd -
-   ```
-
-   **Expected Output**:
-
-   ```
-   /home/your-username
-   /
-   /home/your-username
-   ```
-
-2. List all files in `/etc` sorted by size in human-readable format:
-
-   ```bash
-   ls -lSh /etc
-   ```
-
-   **Expected Output** (example):
-
-   ```
-   -rw-r--r-- 1 root root 1.2M Jan  1 10:00 file1
-   -rw-r--r-- 1 root root  512 Jan  1 10:00 file2
-   ```
-
-3. Count the number of hidden files in your home directory:
-   ```bash
-   ls -A ~ | grep "^\." | wc -l
-   ```
-   **Expected Output**:
-   ```
-   10
-   ```
+- **At Command**:
+  - `at 2pm` – Schedule a one-time task.
+  - `atq` – View pending tasks.
+  - `atrm <job_id>` – Remove a pending task.
 
 ---
 
-## **2. File and Directory Management**
+## **12. Backup and Recovery**
 
-### **Task 2: Organize and Manage Files**
+- **File Backup**:
 
-1. Create a directory structure and files:
+  - `cp -r source_dir backup_dir` – Basic directory backup.
+  - `rsync -av --progress /source /backup` – Efficient file synchronization for backup.
+  - `tar -czvf backup.tar.gz /path/to/directory` – Create a compressed backup archive.
+  - `tar -xzvf backup.tar.gz -C /restore/path` – Restore files from a backup archive.
 
-   ```bash
-   mkdir -p ~/projects/{frontend,backend}
-   touch ~/projects/frontend/{index.html,styles.css}
-   touch ~/projects/backend/{app.js,server.js}
-   ```
+- **Database Backup**:
 
-   **Expected Output**:
-   Use `ls -R ~/projects` to verify:
+  - `mysqldump -u root -p database_name > backup.sql` – Backup a MySQL database.
+  - `mysqldump -u root -p --all-databases > all_backup.sql` – Backup all MySQL databases.
+  - `pg_dump -U username -d database_name -f backup.sql` – Backup a PostgreSQL database.
 
-   ```
-   projects:
-   backend  frontend
+- **Database Restoration**:
 
-   projects/backend:
-   app.js  server.js
+  - `mysql -u root -p database_name < backup.sql` – Restore a MySQL database.
+  - `psql -U username -d database_name -f backup.sql` – Restore a PostgreSQL database.
 
-   projects/frontend:
-   index.html  styles.css
-   ```
-
-2. Move and rename files:
-
-   ```bash
-   mv ~/projects/frontend/index.html ~/projects/backend/
-   mv ~/projects/backend/app.js ~/projects/backend/app-backup.js
-   ```
-
-   **Expected Output**:
-   Use `ls ~/projects/backend` to verify:
-
-   ```
-   index.html  app-backup.js  server.js
-   ```
-
-3. Compress the `projects` directory:
-   ```bash
-   tar -zcf projects.tar.gz ~/projects
-   ```
-   Verify:
-   ```bash
-   ls -lh projects.tar.gz
-   ```
-   **Expected Output**:
-   ```
-   -rw-r--r-- 1 user user 4.0K Jan  1 10:10 projects.tar.gz
-   ```
+- **Snapshot Backups**:
+  - `rsnapshot config_file` – Use rsnapshot for incremental backups.
+  - `btrfs subvolume snapshot /source /backup/snapshot_name` – Create a Btrfs snapshot.
 
 ---
 
-## **3. File Permissions and Ownership**
+## **13. Other Useful Commands**
 
-### **Task 3: Secure Files**
+- **Disk Cleanup**:
 
-1. Create a file and set restrictive permissions:
+  - `sudo apt-get clean` – Clear cached package files.
+  - `sudo apt-get autoclean` – Remove old cached files.
+  - `sudo apt-get autoremove` – Remove unused packages.
 
-   ```bash
-   touch secure-data.txt
-   chmod 600 secure-data.txt
-   ls -l secure-data.txt
-   ```
+- **User Management**:
 
-   **Expected Output**:
+  - `adduser username` – Add a new user.
+  - `passwd username` – Set or change a user’s password.
+  - `deluser username` – Delete a user.
+  - `usermod -aG groupname username` – Add a user to a group.
 
-   ```
-   -rw------- 1 user user 0 Jan  1 10:15 secure-data.txt
-   ```
+- **Networking Tools**:
 
-2. Change the ownership of the file:
-   ```bash
-   sudo chown root:root secure-data.txt
-   ls -l secure-data.txt
-   ```
-   **Expected Output**:
-   ```
-   -rw------- 1 root root 0 Jan  1 10:15 secure-data.txt
-   ```
+  - `ip a` – Display network interfaces and IP addresses.
+  - `hostnamectl` – Manage hostname settings.
+  - `ifconfig` – Display or configure network interfaces (deprecated, use `ip` instead).
 
----
+- **System Performance**:
 
-## **4. Processes and Job Control**
+  - `uptime` – Show system uptime and load.
+  - `free -h` – Display memory usage.
+  - `sar` – Monitor CPU usage over time.
 
-### **Task 4: Manage Processes**
+- **Filesystem Checks**:
 
-1. Start a background task:
+  - `fsck /dev/sdX` – Check and repair a filesystem.
+  - `tune2fs -l /dev/sdX` – Show filesystem parameters.
 
-   ```bash
-   sleep 100 &
-   jobs
-   ```
-
-   **Expected Output**:
-
-   ```
-   [1]+  Running                 sleep 100 &
-   ```
-
-2. Bring the task to the foreground and then terminate it:
-
-   ```bash
-   fg 1
-   ctrl+c
-   ```
-
-   **Expected Output**:
-
-   ```
-   ^C
-   ```
-
-3. View and kill a specific process:
-   ```bash
-   ps aux | grep "sleep"
-   kill -9 <PID>
-   ```
-   **Expected Output**:
-   ```
-   (No output if the process is successfully terminated.)
-   ```
+- **Hardware Information**:
+  - `lscpu` – Display CPU architecture details.
+  - `lsusb` – List USB devices.
+  - `lspci` – List PCI devices.
 
 ---
-
-## **5. Networking**
-
-### **Task 5: Test Remote Connections**
-
-1. Start a local HTTP server:
-
-   ```bash
-   python3 -m http.server 8000 &
-   curl http://localhost:8000
-   ```
-
-   **Expected Output** (example):
-
-   ```
-   <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
-   <html>
-   <head>
-   <title>Index of /</title>
-   </head>
-   <body>
-   <h1>Index of /</h1>
-   ...
-   ```
-
-2. Securely transfer files using `sftp`:
-   ```bash
-   sftp user@remote-server
-   put secure-data.txt
-   ls
-   ```
-   **Expected Output**:
-   ```
-   sftp> put secure-data.txt
-   Uploading secure-data.txt to /home/user/secure-data.txt
-   sftp> ls
-   secure-data.txt
-   ```
-
----
-
-## **6. Environment Variables**
-
-### **Task 6: Set and Use Environment Variables**
-
-1. Set a temporary environment variable:
-
-   ```bash
-   export MY_VAR="Hello, Linux!"
-   echo $MY_VAR
-   ```
-
-   **Expected Output**:
-
-   ```
-   Hello, Linux!
-   ```
-
-2. Make it permanent:
-   ```bash
-   echo 'export MY_VAR="Persistent Value"' >> ~/.bashrc
-   source ~/.bashrc
-   echo $MY_VAR
-   ```
-   **Expected Output**:
-   ```
-   Persistent Value
-   ```
-
----
-
-## **7. System Monitoring**
-
-### **Task 7: Monitor Resource Usage**
-
-1. Check disk usage:
-
-   ```bash
-   df -h
-   ```
-
-   **Expected Output** (example):
-
-   ```
-   Filesystem      Size  Used Avail Use% Mounted on
-   /dev/sda1        50G   20G   30G  40% /
-   ```
-
-2. Monitor CPU and memory:
-   ```bash
-   htop
-   ```
-   **Expected Output**: (Interactive process viewer opens showing real-time system stats.)
-
----
-
-## **8. Debugging**
-
-### **Task 8: Debug Scripts**
-
-1. Create a script with an intentional error:
-
-   ```bash
-   echo -e '#!/bin/bash\ncat nonexistent-file' > faulty.sh
-   chmod +x faulty.sh
-   ./faulty.sh
-   ```
-
-   **Expected Output**:
-
-   ```
-   cat: nonexistent-file: No such file or directory
-   ```
-
-2. Debug the script:
-   ```bash
-   bash -x faulty.sh
-   ```
-   **Expected Output**:
-   ```
-   + cat nonexistent-file
-   cat: nonexistent-file: No such file or directory
-   ```
