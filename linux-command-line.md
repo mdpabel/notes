@@ -238,18 +238,56 @@ priority: 999
 
 ## **11. Automation and Scheduling**
 
-- **Cron Jobs**:
+### **Cron Jobs**
+
+- **Commands**:
 
   - `crontab -e` – Edit cron jobs for a user.
-  - `@reboot` – Run a task at system startup.
-  - `0 2 * * *` – Schedule a task (e.g., daily at 2 AM).
+  - `crontab -l` – List all cron jobs for a user.
+  - `crontab -r` – Remove all cron jobs for a user.
+  - `sudo crontab -u username -e` – Edit cron jobs for another user.
+  - `sudo crontab -u username -l` – List all cron jobs for another user.
 
-- **At Command**:
-  - `at 2pm` – Schedule a one-time task.
-  - `atq` – View pending tasks.
-  - `atrm <job_id>` – Remove a pending task.
+- **Special Timing**:
+
+  - `@reboot` – Run a task at system startup.
+  - `@yearly` – Run once a year (`0 0 1 1 *`).
+  - `@monthly` – Run once a month (`0 0 1 * *`).
+  - `@weekly` – Run once a week (`0 0 * * 0`).
+  - `@daily` – Run once a day (`0 0 * * *`).
+  - `@hourly` – Run once an hour (`0 * * * *`).
+
+- **Examples**:
+  - `0 2 * * * /path/to/script.sh` – Schedule a task daily at 2 AM.
+  - `*/5 * * * * /path/to/script.sh` – Schedule a task every 5 minutes.
+  - `0 9 * * 1 /path/to/script.sh` – Schedule a task every Monday at 9 AM.
 
 ---
+
+### **At Command**
+
+- **Commands**:
+
+  - `at 2pm` – Schedule a one-time task to run at 2 PM.
+  - `at now + 1 hour` – Schedule a task to run 1 hour from now.
+  - `atq` – View pending tasks.
+  - `atrm <job_id>` – Remove a pending task by job ID.
+
+- **Usage**:
+  1. Enter the `at` command followed by the desired time.
+  2. Type the command to execute, then press `Ctrl+D` to save.
+
+---
+
+### **Logs and Debugging**
+
+- Check cron job logs:
+  - `grep CRON /var/log/syslog` – View cron logs on most systems.
+  - `journalctl -u cron` – View cron logs using `journalctl`.
+- Redirect output for debugging:
+  ```bash
+  * * * * * /path/to/script.sh >> /path/to/logfile.log 2>&1
+  ```
 
 ## **12. Backup and Recovery**
 
