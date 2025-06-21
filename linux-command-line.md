@@ -4,6 +4,7 @@ description: Comprehensive Linux commands, categorized with practice tasks for m
 date: 03-24-2024
 status: published
 priority: 999
+ogImg: [Linux](./images/ubuntu.jpg)
 ---
 
 # Linux Commands

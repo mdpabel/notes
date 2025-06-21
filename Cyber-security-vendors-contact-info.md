@@ -48,6 +48,7 @@ Below is the list of search engines or cybersecurity companies we can assist in 
 | ClamAV                         | [ClamAV Submit](http://www.clamav.net/reports/fp)                                                                      |
 | Clean-MX                       | abuse@clean-mx.de                                                                                                      |
 | Cluster25                      | threatintel@cluster25.io                                                                                               |
+| Cloudflare                     | abusereply@cloudflare.com                                                                                              |
 | Cluster25                      | [Cluster25 Delisting](https://www.duskrise.com/delisting/)                                                             |
 | CMC                            | PSIRT@cmccybersecurity.com                                                                                             |
 | CRDF                           | [CRDF False Positive](https://threatcenter.crdf.fr/false_positive.html)                                                |
@@ -83,6 +84,7 @@ Below is the list of search engines or cybersecurity companies we can assist in 
 | GData                          | [GData Submit](https://submit.gdatasoftware.com/privacy?lang=en)                                                       |
 | GData                          | [GData Contact](https://www.gdata.de/help/en/general/GeneralInformation/submitFileAppURL/)                             |
 | Gridinsoft                     | virus@gridinsoft.com                                                                                                   |
+| Gridinsoft                     | [Gridinsoft Support](https://support-antimalware.com/open.php)                                                         |
 | Hacksoft                       | virus@hacksoft.com.pe                                                                                                  |
 | Hacksoft                       | falsopositivo@hacksoft.com.pe                                                                                          |
 | Hauri                          | viruslab@hauri.co.kr                                                                                                   |

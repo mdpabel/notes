@@ -1,3 +1,11 @@
+---
+title: Linux Commands and Practice Tasks
+description: Comprehensive Linux commands, categorized with practice tasks for mastering Linux.
+date: 03-24-2024
+status: draft
+priority: 999
+---
+
 # VPS Setup Guide
 
 This guide provides steps to set up and configure a VPS, categorized for better organization.

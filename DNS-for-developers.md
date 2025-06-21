@@ -152,13 +152,48 @@ In this case, the mail server secure245.inmotionhosting.com has a priority of 10
 
 ## Email
 
-### SPF:
+### SPF: Protect your email reputation
 
 SPF prevents spammers from sending emails on behalf of your domain. The value for SPF will often include the IP addresses or mail servers that are authorized to send email on behalf of your domain.
 
-### DKIM:
+```bash
+Host: @
+Type: TXT
+Value: v=spf1 include:_spf.mail.hostinger.com ~all
+TTL: 3600
+```
+
+### DKIM: Increase email deliverability
 
 DKIM allows the recipient’s email server to verify that the email wasn’t tampered with during transmission. This is a long cryptographic string provided by your email server for email authentication.
+
+```bash
+Host: hostingermail-a._domainkey
+Type: CNAME
+Value: hostingermail-a.dkim.mail.hostinger.com
+TTL: 300
+
+
+Host: hostingermail-b._domainkey
+Type: CNAME
+Value: hostingermail-b.dkim.mail.hostinger.com
+TTL: 300
+
+
+Host: hostingermail-c._domainkey
+Type: CNAME
+Value: hostingermail-c.dkim.mail.hostinger.com
+TTL: 300
+```
+
+### DMARC: Message authentication
+
+```bash
+Host: _dmarc
+Type: TXT
+Value: v=DMARC1; p=none
+TTL: 3600
+```
 
 ### CNAME:
 
