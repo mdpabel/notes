@@ -77,6 +77,7 @@ Below is the list of search engines or cybersecurity companies we can assist in 
 | F-Secure                       | spyware-samples@f-secure.com                                                                                           |
 | F-Secure                       | vsamples@f-secure.com                                                                                                  |
 | Forcepoint ThreatSeeker        | reviewmysite@forcepoint.com                                                                                            |
+| Forcepoint ThreatSeeker        | [forcepoint site lookup](https://support.forcepoint.com/s/site-lookup)                                                 |
 | Fortinet                       | [Fortinet Submit](https://url.fortinet.net/rate/submit.php)                                                            |
 | Fortinet                       | [Fortinet FAQ](https://www.fortiguard.com/faq/classificationdispute)                                                   |
 | Fortinet                       | [Fortinet Contact](https://www.fortiguard.com/contactus)                                                               |
